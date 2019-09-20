@@ -1,3 +1,0 @@
-#!/usr/bin/env ruby
-require 'answersengine/cli'
-AnswersEngine::CLI.start
