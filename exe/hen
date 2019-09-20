@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require 'datahen/cli'
+Datahen::CLI.start

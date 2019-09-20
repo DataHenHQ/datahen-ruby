@@ -1,13 +1,13 @@
-# AnswersEngine
+# Datahen
 
-Welcome to the AnswersEngine gem, this gem includes the client and the CLI to be able to integrate with answersengine.com
+Welcome to the Datahen gem, this gem includes the client and the CLI to be able to integrate with datahen.com
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'answersengine'
+gem 'datahen'
 ```
 
 And then execute:
@@ -16,13 +16,13 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install answersengine
+    $ gem install datahen
 
 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/answersengine. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/datahen. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
