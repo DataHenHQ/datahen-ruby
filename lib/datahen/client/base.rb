@@ -10,7 +10,7 @@ module Datahen
       end
 
       def env_api_url
-        ENV['DATAHEN_API_URL'].nil? ? 'http://fetch.datahen.com/api/v1' : ENV['DATAHEN_API_URL']
+        ENV['DATAHEN_API_URL'].nil? ? 'http://app.datahen.com/api/v1' : ENV['DATAHEN_API_URL']
       end
 
       def auth_token
