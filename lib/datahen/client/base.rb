@@ -9,8 +9,18 @@ module Datahen
         ENV['DATAHEN_TOKEN']
       end
 
+      def self.env_ignore_ssl
+        ENV['DATAHEN_IGNORE_SSL'].to_s.strip == '1'
+      end
+
       def env_api_url
-        ENV['DATAHEN_API_URL'].nil? ? 'http://app.datahen.com/api/v1' : ENV['DATAHEN_API_URL']
+        ENV['DATAHEN_API_URL'].nil? ? 'https://app.datahen.com/api/v1' : ENV['DATAHEN_API_URL']
+      end
+
+      def ignore_ssl
+        return @ignore_ssl unless @ignore_ssl.nil?
+        @ignore_ssl = self.class.env_ignore_ssl
+        @ignore_ssl
       end
 
       def auth_token
@@ -22,12 +32,16 @@ module Datahen
       end
 
       def initialize(opts={})
+        @ignore_ssl = opts[:ignore_ssl]
         self.class.base_uri(env_api_url)
         self.auth_token = opts[:auth_token] unless opts[:auth_token].nil?
-        @options = { headers: {
-          "Authorization" => "Bearer #{auth_token}",
-          "Content-Type" => "application/json",
-          }}
+        @options = {
+          headers: {
+            "Authorization" => "Bearer #{auth_token}",
+            "Content-Type" => "application/json",
+          },
+          verify: !ignore_ssl
+        }
 
         query = {}
         query[:p] = opts[:page] if opts[:page]

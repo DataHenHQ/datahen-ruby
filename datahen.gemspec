@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Parama Danoesubroto"]
   spec.email         = ["parama@datahen.com"]
 
-  spec.summary       = %q{Datahen toolbelt for developers}
-  spec.description   = %q{Datahen toolbelt to develop scrapers and other scripts}
+  spec.summary       = %q{DataHen toolbelt for developers}
+  spec.description   = %q{DataHen toolbelt to develop scrapers and other scripts}
   spec.homepage      = "https://datahen.com"
   spec.license       = "MIT"
 
