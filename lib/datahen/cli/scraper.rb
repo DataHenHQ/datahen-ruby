@@ -150,7 +150,23 @@ module Datahen
         else
           puts "#{client.scraper_job_current_stats(scraper_name)}"
         end
+      end
 
+      desc "history <scraper_name>", "Get historic stats for a job"
+      long_desc <<-LONGDESC
+        Get historic stats for a scraper's current job\n
+      LONGDESC
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      option :"min-timestamp", type: :string, desc: 'Starting timestamp point in time to query historic stats (inclusive)'
+      option :"max-timestamp", type: :string, desc: 'Ending timestamp point in time to query historic stats (inclusive)'
+      option :"limit", type: :numeric, desc: 'Limit stats retrieved.'
+      def history(scraper_name)
+        client = Client::JobStat.new(options)
+        if options[:job]
+          puts "#{client.job_stats_history(options[:job])}"
+        else
+          puts "#{client.scraper_job_stats_history(scraper_name)}"
+        end
       end
 
 

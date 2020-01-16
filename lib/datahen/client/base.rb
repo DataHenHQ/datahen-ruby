@@ -51,6 +51,9 @@ module Datahen
         query[:status] = opts[:status] if opts[:status]
         query[:page_type] = opts[:page_type] if opts[:page_type]
         query[:gid] = opts[:gid] if opts[:gid]
+        query[:"min-timestamp"] = opts[:"min-timestamp"]
+        query[:"max-timestamp"] = opts[:"max-timestamp"]
+        query[:limit] = opts[:limit]
 
         if opts[:query]
           if opts[:query].is_a?(Hash)

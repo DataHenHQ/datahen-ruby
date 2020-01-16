@@ -10,7 +10,14 @@ module Datahen
         self.class.get("/scrapers/#{scraper_name}/current_job/stats/current", @options)
       end
 
+      def job_stats_history(job_id)
+        self.class.get("/jobs/#{job_id}/stats/history", @options)
+      end
+
+      def scraper_job_stats_history(scraper_name)
+        self.class.get("/scrapers/#{scraper_name}/current_job/stats/history", @options)
+      end
+
     end
   end
 end
-
