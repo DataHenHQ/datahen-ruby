@@ -159,7 +159,8 @@ module Datahen
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       option :"min-timestamp", type: :string, desc: 'Starting timestamp point in time to query historic stats (inclusive)'
       option :"max-timestamp", type: :string, desc: 'Ending timestamp point in time to query historic stats (inclusive)'
-      option :"limit", type: :numeric, desc: 'Limit stats retrieved.'
+      option :"limit", type: :numeric, desc: 'Limit stats retrieved'
+      option :"order", type: :numeric, desc: 'Order stats by timestamp [DESC]'
       def history(scraper_name)
         client = Client::JobStat.new(options)
         if options[:job]

@@ -54,6 +54,7 @@ module Datahen
         query[:"min-timestamp"] = opts[:"min-timestamp"]
         query[:"max-timestamp"] = opts[:"max-timestamp"]
         query[:limit] = opts[:limit]
+        query[:order] = opts[:order]
 
         if opts[:query]
           if opts[:query].is_a?(Hash)
