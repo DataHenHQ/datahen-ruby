@@ -12,28 +12,15 @@ module Datahen
       def content(gid)
         client = Client::GlobalPage.new(options)
         result = JSON.parse(client.find_content(gid).to_s)
-        
+
         if result['available'] == true
           puts "Preview content url: \"#{result['preview_url']}\""
           `open "#{result['preview_url']}"`
         else
           puts "Content does not exist"
-        end        
+        end
       end
 
-      desc "failedcontent <gid>", "Show failed content of a globalpage"
-      def failedcontent(gid)
-        client = Client::GlobalPage.new(options)
-        result = JSON.parse(client.find_failed_content(gid).to_s)
-        
-        if result['available'] == true
-          puts "Preview failed content url: \"#{result['preview_url']}\""
-          `open "#{result['preview_url']}"`
-        else
-          puts "Failed Content does not exist"
-        end        
-      end
-      
     end
   end
 end

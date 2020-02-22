@@ -62,6 +62,14 @@ module Datahen
         self.class.post("/scrapers/#{scraper_name}/current_job/pages", params)
       end
 
+      def find_content(scraper_name, gid)
+        self.class.get("/scrapers/#{scraper_name}/current_job/pages/#{gid}/content", @options)
+      end
+
+      def find_failed_content(scraper_name, gid)
+        self.class.get("/scrapers/#{scraper_name}/current_job/pages/#{gid}/failed_content", @options)
+      end
+
     end
   end
 end

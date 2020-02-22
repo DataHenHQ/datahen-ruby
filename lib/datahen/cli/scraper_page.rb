@@ -17,6 +17,7 @@ module Datahen
       option :per_page, :aliases => :P, type: :numeric, desc: 'Number of records per page. Max 500 per page.'
       option :fetch_fail, type: :boolean, desc: 'Returns only pages that fails fetching.'
       option :parse_fail, type: :boolean, desc: 'Returns only pages that fails parsing.'
+      option :status, type: :string, desc: 'Returns only pages with specific status.'
       def list(scraper_name)
         if options[:job]
           client = Client::JobPage.new(options)
@@ -194,6 +195,46 @@ module Datahen
           unless more_token.nil?
             puts "to see more entries, add: \"--more #{more_token}\""
           end
+        end
+      end
+
+      desc "content <scraper_name> <gid>", "Show a page's content in scraper's current job"
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      def content(scraper_name, gid)
+        result = nil
+        if options[:job]
+          client = Client::JobPage.new(options)
+          result = JSON.parse(client.find_content(options[:job], gid).to_s)
+        else
+          client = Client::ScraperJobPage.new(options)
+          result = JSON.parse(client.find_content(scraper_name, gid).to_s)
+        end
+
+        if result['available'] == true
+          puts "Preview content url: \"#{result['preview_url']}\""
+          `open "#{result['preview_url']}"`
+        else
+          puts "Content does not exist"
+        end
+      end
+
+      desc "failedcontent <gid>", "Show a page's failed content in scraper's current job"
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      def failedcontent(scraper_name, gid)
+        result = nil
+        if options[:job]
+          client = Client::JobPage.new(options)
+          result = JSON.parse(client.find_failed_content(options[:job], gid).to_s)
+        else
+          client = Client::ScraperJobPage.new(options)
+          result = JSON.parse(client.find_failed_content(scraper_name, gid).to_s)
+        end
+
+        if result['available'] == true
+          puts "Preview failed content url: \"#{result['preview_url']}\""
+          `open "#{result['preview_url']}"`
+        else
+          puts "Failed Content does not exist"
         end
       end
 

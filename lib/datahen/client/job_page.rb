@@ -53,6 +53,14 @@ module Datahen
 
         self.class.put("/jobs/#{job_id}/pages/#{gid}/parsing_update", params)
       end
+
+      def find_content(job_id, gid)
+        self.class.get("/jobs/#{job_id}/pages/#{gid}/content", @options)
+      end
+
+      def find_failed_content(job_id, gid)
+        self.class.get("/jobs/#{job_id}/pages/#{gid}/failed_content", @options)
+      end
     end
   end
 end
