@@ -76,8 +76,8 @@ module Datahen
       end
 
       def get_failed_content(gid)
-        client = Client::GlobalPage.new()
-        content_json = client.find_failed_content(gid)
+        client = Client::JobPage.new()
+        content_json = client.find_failed_content(job_id, gid)
 
         if content_json['available']
           signed_url = content_json['signed_url']
