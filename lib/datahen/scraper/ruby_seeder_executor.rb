@@ -6,6 +6,7 @@ module Datahen
       def initialize(options={})
         @filename = options.fetch(:filename) { raise "Filename is required"}
         @job_id = options[:job_id]
+        @keep_outputs = !!(options.fetch(:keep_outputs) { false })
       end
 
       def self.exposed_methods
@@ -81,7 +82,9 @@ module Datahen
 
         response = seeding_update(
           job_id: job_id,
-          seeding_status: :starting)
+          seeding_status: :starting,
+          keep_outputs: @keep_outputs
+        )
 
         if response.code == 200
           puts "Seeding Status Updated."

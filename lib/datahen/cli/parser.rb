@@ -10,12 +10,13 @@ module Datahen
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       option :global, :aliases => :g, type: :boolean, default: false, desc: 'Use globalpage instead of a job page'
       option :vars, :aliases => :v, type: :string, desc: 'Set user-defined page variables. Must be in json format. i.e: {"Foo":"bar"}'
+      option :"keep-outputs", :aliases => :ko, type: :boolean, default: false, desc: "Don't delete existing outputs"
       def try_parse(scraper_name, parser_file, gid)
-        begin 
-          
+        begin
+
             if options[:job]
               job_id = options[:job]
-            elsif options[:global] 
+            elsif options[:global]
               job_id = nil
             else
               job = Client::ScraperJob.new(options).find(scraper_name)
@@ -24,7 +25,7 @@ module Datahen
 
 
           vars = JSON.parse(options[:vars]) if options[:vars]
-          puts Datahen::Scraper::Parser.exec_parser_page(parser_file, gid, job_id, false, vars)
+          puts Datahen::Scraper::Parser.exec_parser_page(parser_file, gid, job_id, false, vars, options[:"keep-outputs"])
 
           rescue JSON::ParserError
           if options[:vars]
@@ -40,6 +41,8 @@ module Datahen
             <GID>: Global ID of the page.\x5
           LONGDESC
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      option :vars, :aliases => :v, type: :string, desc: 'Set user-defined page variables. Must be in json format. i.e: {"Foo":"bar"}'
+      option :"keep-outputs", :aliases => :ko, type: :boolean, default: false, desc: "Don't delete existing outputs"
       def exec_parse(scraper_name, parser_file, *gids)
         gids.each do |gid|
           begin
@@ -52,7 +55,8 @@ module Datahen
               job_id = job['id']
             end
 
-            puts Datahen::Scraper::Parser.exec_parser_page(parser_file, gid, job_id, true)
+            vars = JSON.parse(options[:vars]) if options[:vars]
+            puts Datahen::Scraper::Parser.exec_parser_page(parser_file, gid, job_id, true, vars, options[:"keep-outputs"])
           rescue => e
             puts e
           end

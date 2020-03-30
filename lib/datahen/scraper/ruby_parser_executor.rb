@@ -15,6 +15,7 @@ module Datahen
         @gid = options.fetch(:gid) { raise "GID is required"}
         @job_id = options.fetch(:job_id)
         @page_vars = options.fetch(:vars) { {} }
+        @keep_outputs = !!(options.fetch(:keep_outputs) { false })
       end
 
       def self.exposed_methods
@@ -66,7 +67,9 @@ module Datahen
         response = parsing_update(
           job_id: job_id,
           gid: gid,
-          parsing_status: :starting)
+          parsing_status: :starting,
+          keep_outputs: @keep_outputs
+        )
 
         if response.code == 200
           puts "Page Parsing Status Updated."
@@ -165,7 +168,7 @@ module Datahen
             handle_error(e) if save
             raise e
           end
-          
+
           if refetch_self
             refetch_page gid
           elsif reparse_self

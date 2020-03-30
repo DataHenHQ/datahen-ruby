@@ -41,6 +41,7 @@ module Datahen
         body[:pages] = opts.fetch(:pages) {[]}
         body[:seeding_status] = opts.fetch(:seeding_status){ nil }
         body[:log_error] = opts[:log_error] if opts[:log_error]
+        body[:keep_outputs] = !!opts[:keep_outputs] if opts.has_key?(:keep_outputs)
 
         params = @options.merge({body: body.to_json})
 

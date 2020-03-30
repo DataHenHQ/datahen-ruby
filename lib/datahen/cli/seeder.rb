@@ -7,6 +7,7 @@ module Datahen
             <seeder_file>: Seeder script file will be executed.\x5
           LONGDESC
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      option :"keep-outputs", :aliases => :ko, type: :boolean, default: false, desc: "Don't delete existing outputs"
       def try_seed(scraper_name, seeder_file)
         if options[:job]
           job_id = options[:job]
@@ -14,8 +15,8 @@ module Datahen
           job = Client::ScraperJob.new(options).find(scraper_name)
           job_id = job['id']
         end
-        
-        puts Datahen::Scraper::Seeder.exec_seeder(seeder_file, job_id, false)
+
+        puts Datahen::Scraper::Seeder.exec_seeder(seeder_file, job_id, false, options[:"keep-outputs"])
       end
 
       desc "exec <scraper_name> <seeder_file>", "Executes a seeder script onto a scraper's current job."
@@ -24,6 +25,7 @@ module Datahen
             <seeder_file>: Seeder script file that will be executed on the scraper's current job.\x5
           LONGDESC
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      option :"keep-outputs", :aliases => :ko, type: :boolean, default: false, desc: "Don't delete existing outputs"
       def exec_parse(scraper_name, seeder_file)
         if options[:job]
           job_id = options[:job]
