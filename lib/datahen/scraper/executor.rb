@@ -63,7 +63,7 @@ module Datahen
         client.find(gid)
       end
 
-      def get_content(gid)
+      def get_content(job_id, gid)
         client = Client::JobPage.new()
         content_json = client.find_content(job_id, gid)
 
@@ -75,7 +75,7 @@ module Datahen
         end
       end
 
-      def get_failed_content(gid)
+      def get_failed_content(job_id, gid)
         client = Client::JobPage.new()
         content_json = client.find_failed_content(job_id, gid)
 
