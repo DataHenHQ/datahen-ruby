@@ -105,13 +105,19 @@ module Datahen
       option :fetch_fail, type: :boolean, desc: 'Refetches only pages that fails fetching.'
       option :parse_fail, type: :boolean, desc: 'Refetches only pages that fails parsing.'
       option :status, type: :string, desc: 'Refetches only pages with a specific status.'
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def refetch(scraper_name)
         if !options.key?(:gid) && !options.key?(:fetch_fail) && !options.key?(:parse_fail) && !options.key?(:status)
           puts "Must specify either a --gid, --fetch-fail, --parse-fail or --status"
           return
         end
-        client = Client::ScraperJobPage.new(options)
-        puts "#{client.refetch(scraper_name)}"
+        if options[:job]
+          client = Client::JobPage.new(options)
+          puts "#{client.refetch(options[:job])}"
+        else
+          client = Client::ScraperJobPage.new(options)
+          puts "#{client.refetch(scraper_name)}"
+        end
       end
 
       desc "reparse <scraper_name>", "Reparse Pages on a scraper's current job"
@@ -121,6 +127,7 @@ module Datahen
       option :gid, :aliases => :g, type: :string, desc: 'Reparse a specific GID'
       option :parse_fail, type: :boolean, desc: 'Reparse only pages that fails parsing.'
       option :status, type: :string, desc: 'Reparse only pages with a specific status.'
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def reparse(scraper_name)
         begin
           options[:vars] = JSON.parse(options[:vars]) if options[:vars]
@@ -130,8 +137,13 @@ module Datahen
             return
           end
 
-          client = Client::ScraperJobPage.new(options)
-          puts "#{client.reparse(scraper_name)}"
+          if options[:job]
+            client = Client::JobPage.new(options)
+            puts "#{client.reparse(options[:job])}"
+          else
+            client = Client::ScraperJobPage.new(options)
+            puts "#{client.reparse(scraper_name)}"
+          end
 
         rescue JSON::ParserError
           if options[:vars]

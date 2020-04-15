@@ -64,8 +64,8 @@ module Datahen
       end
 
       def get_content(gid)
-        client = Client::GlobalPage.new()
-        content_json = client.find_content(gid)
+        client = Client::JobPage.new()
+        content_json = client.find_content(job_id, gid)
 
         if content_json['available']
           signed_url = content_json['signed_url']

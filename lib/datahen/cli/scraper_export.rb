@@ -12,7 +12,6 @@ module Datahen
         puts "#{client.find(export_id)}"
       end
 
-
       desc "list", "Gets a list of exports"
       long_desc <<-LONGDESC
         List exports.
@@ -34,13 +33,13 @@ module Datahen
       def download(export_id)
         client = Client::ScraperExport.new(options)
         result = JSON.parse(client.download(export_id).to_s)
-        
+
         if result['signed_url']
           puts "Download url: \"#{result['signed_url']}\""
           `open "#{result['signed_url']}"`
         else
           puts "Exported file does not exist"
-        end        
+        end
       end
 
 

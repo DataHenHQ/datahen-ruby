@@ -15,6 +15,7 @@ module Datahen
         body[:status] = opts[:status] if opts[:status]
         body[:standard_worker_count] = opts[:workers] if opts[:workers]
         body[:browser_worker_count] = opts[:browsers] if opts[:browsers]
+        body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         params = @options.merge({body: body.to_json})
 
         self.class.put("/jobs/#{job_id}", params)

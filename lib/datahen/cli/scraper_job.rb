@@ -29,27 +29,45 @@ module Datahen
       long_desc <<-LONGDESC
         Cancels a scraper's current job
       LONGDESC
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def cancel(scraper_name)
-        client = Client::ScraperJob.new(options)
-        puts "#{client.cancel(scraper_name)}"
+        if options[:job]
+          client = Client::Job.new(options)
+          puts "#{client.cancel(options[:job])}"
+        else
+          client = Client::ScraperJob.new(options)
+          puts "#{client.cancel(scraper_name)}"
+        end
       end
 
       desc "resume <scraper_name>", "resumes a scraper's current job"
       long_desc <<-LONGDESC
         Resumes a scraper's current job
       LONGDESC
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def resume(scraper_name)
-        client = Client::ScraperJob.new(options)
-        puts "#{client.resume(scraper_name)}"
+        if options[:job]
+          client = Client::Job.new(options)
+          puts "#{client.cancel(options[:job])}"
+        else
+          client = Client::ScraperJob.new(options)
+          puts "#{client.cancel(scraper_name)}"
+        end
       end
 
       desc "pause <scraper_name>", "pauses a scraper's current job"
       long_desc <<-LONGDESC
         pauses a scraper's current job
       LONGDESC
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def pause(scraper_name)
-        client = Client::ScraperJob.new(options)
-        puts "#{client.pause(scraper_name)}"
+        if options[:job]
+          client = Client::Job.new(options)
+          puts "#{client.pause(options[:job])}"
+        else
+          client = Client::ScraperJob.new(options)
+          puts "#{client.pause(scraper_name)}"
+        end
       end
 
 
@@ -60,9 +78,15 @@ module Datahen
       option :workers, :aliases => :w, type: :numeric, desc: 'Set how many standard workers to use. Scraper job must be restarted(paused then resumed, or cancelled then resumed) for it to take effect. Default: 1. '
       option :browsers, type: :numeric, desc: 'Set how many browser workers to use. Scraper job must be restarted(paused then resumed, or cancelled then resumed) for it to take effect. Default: 0. '
       option :proxy_type, desc: 'Set the Proxy type. Default: standard'
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def update(scraper_name)
-        client = Client::ScraperJob.new(options)
-        puts "#{client.update(scraper_name, options)}"
+        if options[:job]
+          client = Client::Job.new(options)
+          puts "#{client.update(options[:job], options)}"
+        else
+          client = Client::ScraperJob.new(options)
+          puts "#{client.update(scraper_name, options)}"
+        end
       end
 
       desc "var SUBCOMMAND ...ARGS", "for managing scraper's job variables"

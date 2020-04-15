@@ -181,11 +181,11 @@ module Datahen
       end
 
       def content
-        @content ||= get_content(gid)
+        @content ||= get_content(job_id, gid)
       end
 
       def failed_content
-        @failed_content ||= get_failed_content(gid)
+        @failed_content ||= get_failed_content(job_id, gid)
       end
 
       def handle_error(e)

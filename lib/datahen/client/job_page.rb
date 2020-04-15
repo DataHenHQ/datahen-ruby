@@ -62,6 +62,16 @@ module Datahen
       def find_failed_content(job_id, gid)
         self.class.get("/jobs/#{job_id}/pages/#{gid}/failed_content", @options)
       end
+
+      def reparse(job_id, opts={})
+        params = @options.merge(opts)
+        self.class.put("/jobs/#{job_id}/pages/reparse", params)
+      end
+
+      def refetch(job_id, opts={})
+        params = @options.merge(opts)
+        self.class.put("/jobs/#{job_id}/pages/refetch", params)
+      end
     end
   end
 end
