@@ -48,10 +48,10 @@ module Datahen
       def resume(scraper_name)
         if options[:job]
           client = Client::Job.new(options)
-          puts "#{client.cancel(options[:job])}"
+          puts "#{client.resume(options[:job])}"
         else
           client = Client::ScraperJob.new(options)
-          puts "#{client.cancel(scraper_name)}"
+          puts "#{client.resume(scraper_name)}"
         end
       end
 
