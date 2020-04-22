@@ -26,6 +26,11 @@ module Datahen
         self.class.put("/scrapers/#{scraper_name}/current_job/pages/refetch", params)
       end
 
+      def refetch_by_job(job_id, opts={})
+        params = @options.merge(opts)
+        self.class.put("/jobs/#{job_id}/pages/refetch", params)
+      end
+
       def reparse(scraper_name, opts={})
         params = @options.merge(opts)
         self.class.put("/scrapers/#{scraper_name}/current_job/pages/reparse", params)
