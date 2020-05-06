@@ -20,6 +20,7 @@ require "datahen/client/job_stat"
 require "datahen/client/backblaze_content"
 require "datahen/client/env_var"
 require "datahen/client/scraper_var"
+require "datahen/client/job_var"
 require "datahen/client/scraper_job_var"
 
 

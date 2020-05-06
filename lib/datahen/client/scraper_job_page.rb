@@ -26,6 +26,9 @@ module Datahen
         self.class.put("/scrapers/#{scraper_name}/current_job/pages/refetch", params)
       end
 
+      # Deprecated, please use Datahen::Client::JobVar#refetch instead.
+      #
+      # @note This method will be removed at some point in the future.
       def refetch_by_job(job_id, opts={})
         params = @options.merge(opts)
         self.class.put("/jobs/#{job_id}/pages/refetch", params)
