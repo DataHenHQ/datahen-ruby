@@ -22,6 +22,7 @@ require "datahen/client/env_var"
 require "datahen/client/scraper_var"
 require "datahen/client/job_var"
 require "datahen/client/scraper_job_var"
+require "datahen/client/job_finisher"
 
 
 module Datahen
