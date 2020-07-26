@@ -15,8 +15,12 @@ module Datahen
         self.class.post("/scrapers/#{scraper_name}/jobs", params)
       end
 
-      def find(scraper_name)
-        self.class.get("/scrapers/#{scraper_name}/current_job", @options)
+      def find(scraper_name, opts={})
+        if opts[:live]
+          self.class.get("/scrapers/#{scraper_name}/current_job", @options)
+        else
+          self.class.get("/cached/scrapers/#{scraper_name}/current_job", @options)
+        end
       end
 
       def update(scraper_name, opts={})

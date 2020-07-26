@@ -6,8 +6,12 @@ module Datahen
         self.class.get("/jobs", params)
       end
 
-      def find(job_id)
-        self.class.get("/jobs/#{job_id}", @options)
+      def find(job_id, opts={})
+        if opts[:live]
+          self.class.get("/jobs/#{job_id}", @options)
+        else
+          self.class.get("/cached/jobs/#{job_id}", @options)
+        end
       end
 
       def update(job_id, opts={})

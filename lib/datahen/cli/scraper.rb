@@ -60,7 +60,7 @@ module Datahen
       desc "show <scraper_name>", "Show a scraper"
       def show(scraper_name)
         client = Client::Scraper.new(options)
-        puts "#{client.find(scraper_name)}"
+        puts "#{client.find(scraper_name, options)}"
       end
 
       desc "delete <scraper_name>", "Delete a scraper and related records"
@@ -140,17 +140,18 @@ module Datahen
         end
       end
 
-      desc "stats <scraper_name>", "Get the current stat for a job"
+      desc "stats <scraper_name>", "Get the stat for a current job (Defaults to showing data from cached stats)"
       long_desc <<-LONGDESC
         Get stats for a scraper's current job\n
       LONGDESC
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      option :live, type: :boolean, desc: 'Get data from the live stats, not cached stats.'
       def stats(scraper_name)
         client = Client::JobStat.new(options)
         if options[:job]
-          puts "#{client.job_current_stats(options[:job])}"
+          puts "#{client.job_current_stats(options[:job], options)}"
         else
-          puts "#{client.scraper_job_current_stats(scraper_name)}"
+          puts "#{client.scraper_job_current_stats(scraper_name, options)}"
         end
       end
 
