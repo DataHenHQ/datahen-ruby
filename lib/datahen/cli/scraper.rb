@@ -60,7 +60,7 @@ module Datahen
       desc "show <scraper_name>", "Show a scraper"
       def show(scraper_name)
         client = Client::Scraper.new(options)
-        puts "#{client.find(scraper_name, options)}"
+        puts "#{client.find(scraper_name)}"
       end
 
       desc "delete <scraper_name>", "Delete a scraper and related records"
