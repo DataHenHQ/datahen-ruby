@@ -7,10 +7,16 @@ module Datahen
       end
 
       desc "show <scraper_name>", "Show a scraper's current job (Defaults to showing data from cached job)"
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       option :live, type: :boolean, desc: 'Get data from the live job, not cached job.'
       def show(scraper_name)
-        client = Client::ScraperJob.new(options)
-        puts "#{client.find(scraper_name, options)}"
+        if options[:job]
+          client = Client::Job.new(options)
+          puts "#{client.find(options[:job], options)}"
+        else
+          client = Client::ScraperJob.new(options)
+          puts "#{client.find(scraper_name, options)}"
+        end
       end
 
 

@@ -230,7 +230,7 @@ module Datahen
         end
       end
 
-      desc "failedcontent <gid>", "Show a page's failed content in scraper's current job"
+      desc "failedcontent <scraper_name> <gid>", "Show a page's failed content in scraper's current job"
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def failedcontent(scraper_name, gid)
         result = nil

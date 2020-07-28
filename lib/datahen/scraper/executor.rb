@@ -60,7 +60,12 @@ module Datahen
 
       def init_global_page()
         client = Client::GlobalPage.new()
-        client.find(gid)
+        global_page = client.find(gid)
+        unless global_page.code == 200
+          raise "GID #{gid} not found. Aborting execution!"
+        else
+          global_page
+        end
       end
 
       def get_content(job_id, gid)
@@ -287,11 +292,12 @@ module Datahen
           end
 
           # behave differently if it is a real save
+          save_status = status
           if save
             log_msg = "Saving #{log_msgs.join(' and ')}."
             puts "#{log_msg}"
           else
-            status = "#{status}_try"
+            save_status = "#{status}_try"
           end
 
           # saving to server
@@ -300,7 +306,7 @@ module Datahen
             gid: gid,
             pages: pages_slice,
             outputs: outputs_slice,
-            status: status)
+            status: save_status)
 
           if response.code == 200
             if save
