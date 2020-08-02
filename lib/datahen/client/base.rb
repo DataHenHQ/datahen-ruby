@@ -5,6 +5,8 @@ module Datahen
     class Base
       include HTTParty
 
+      default_timeout 60
+
       def self.env_auth_token
         ENV['DATAHEN_TOKEN']
       end
