@@ -164,12 +164,13 @@ module Datahen
       option :"max-timestamp", type: :string, desc: 'Ending timestamp point in time to query historic stats (inclusive)'
       option :"limit", type: :numeric, desc: 'Limit stats retrieved'
       option :"order", type: :numeric, desc: 'Order stats by timestamp [DESC]'
+      option :live, type: :boolean, desc: 'Get data from the live stats history, not cached stats history.'
       def history(scraper_name)
         client = Client::JobStat.new(options)
         if options[:job]
-          puts "#{client.job_stats_history(options[:job])}"
+          puts "#{client.job_stats_history(options[:job], options)}"
         else
-          puts "#{client.scraper_job_stats_history(scraper_name)}"
+          puts "#{client.scraper_job_stats_history(scraper_name, options)}"
         end
       end
 
