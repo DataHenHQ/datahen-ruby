@@ -165,6 +165,7 @@ module Datahen
       option :"limit", type: :numeric, desc: 'Limit stats retrieved'
       option :"order", type: :numeric, desc: 'Order stats by timestamp [DESC]'
       option :live, type: :boolean, desc: 'Get data from the live stats history, not cached stats history.'
+      option :filter, type: :string, desc: 'Filter results on `day` or `hour`, if not specified will return all records.'
       def history(scraper_name)
         client = Client::JobStat.new(options)
         if options[:job]
