@@ -177,13 +177,13 @@ module Datahen
         end
       end
 
-      desc "profile", "displays the scraper applied profile"
+      desc "profile <scraper_name>", "displays the scraper applied profile"
       long_desc <<-LONGDESC
         Displays the account applied profile
       LONGDESC
-      def profile()
+      def profile(scraper_name)
         client = Client::Scraper.new(options)
-        puts "#{client.profile()}"
+        puts "#{client.profile(scraper_name)}"
       end
 
       desc "job SUBCOMMAND ...ARGS", "manage scrapers jobs"

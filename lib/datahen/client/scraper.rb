@@ -55,7 +55,7 @@ module Datahen
         self.class.delete("/scrapers/#{scraper_name}", params)
       end
 
-      def profile(job_id, opts={})
+      def profile(scraper_name, opts={})
         params = @options.merge(opts)
 
         self.class.get("/scrapers/#{scraper_name}/profile", params)
