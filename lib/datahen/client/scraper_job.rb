@@ -50,10 +50,10 @@ module Datahen
         update(scraper_name, opts)
       end
 
-      def profile(job_id, opts={})
+      def profile(scraper_name, opts={})
         params = @options.merge(opts)
 
-        self.class.get("/jobs/#{job_id}/profile", params)
+        self.class.get("/scrapers/#{scraper_name}/current_job/profile", params)
       end
     end
   end
