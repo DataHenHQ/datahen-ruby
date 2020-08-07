@@ -25,6 +25,7 @@ module Datahen
         body[:cancel_current_job] = opts[:cancel_current_job] if opts[:cancel_current_job]
         body[:schedule] = opts[:schedule] if opts[:schedule]
         body[:timezone] = opts[:timezone] if opts[:timezone]
+        body[:profile] = opts[:profile] if opts[:profile]
         params = @options.merge({body: body.to_json})
         self.class.post("/scrapers", params)
       end
@@ -43,6 +44,7 @@ module Datahen
         body[:cancel_current_job] = opts[:cancel_current_job] if opts.has_key?("cancel_current_job") || opts.has_key?(:cancel_current_job)
         body[:schedule] = opts[:schedule] if opts[:schedule]
         body[:timezone] = opts[:timezone] if opts[:timezone]
+        body[:profile] = opts[:profile] if opts[:profile]
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}", params)
@@ -51,6 +53,12 @@ module Datahen
       def delete(scraper_name, opts={})
         params = @options.merge(opts)
         self.class.delete("/scrapers/#{scraper_name}", params)
+      end
+
+      def profile(job_id, opts={})
+        params = @options.merge(opts)
+
+        self.class.get("/scrapers/#{scraper_name}/profile", params)
       end
     end
   end

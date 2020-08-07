@@ -64,7 +64,7 @@ module Datahen
 
       desc "pause <scraper_name>", "pauses a scraper's current job"
       long_desc <<-LONGDESC
-        pauses a scraper's current job
+        Pauses a scraper's current job
       LONGDESC
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def pause(scraper_name)
@@ -85,6 +85,7 @@ module Datahen
       option :workers, :aliases => :w, type: :numeric, desc: 'Set how many standard workers to use. Scraper job must be restarted(paused then resumed, or cancelled then resumed) for it to take effect. Default: 1. '
       option :browsers, type: :numeric, desc: 'Set how many browser workers to use. Scraper job must be restarted(paused then resumed, or cancelled then resumed) for it to take effect. Default: 0. '
       option :proxy_type, desc: 'Set the Proxy type. Default: standard'
+      option :profile, type: :string, desc: 'Set the profiles (comma separated) to apply to the job. Default: default'
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def update(scraper_name)
         if options[:job]
@@ -93,6 +94,21 @@ module Datahen
         else
           client = Client::ScraperJob.new(options)
           puts "#{client.update(scraper_name, options)}"
+        end
+      end
+
+      desc "profile <scraper_name>", "displays a scraper's current job applied profile"
+      long_desc <<-LONGDESC
+        Displays a scraper's current job applied profile
+      LONGDESC
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      def profile(scraper_name)
+        if options[:job]
+          client = Client::Job.new(options)
+          puts "#{client.profile(options[:job])}"
+        else
+          client = Client::ScraperJob.new(options)
+          puts "#{client.profile(scraper_name)}"
         end
       end
 

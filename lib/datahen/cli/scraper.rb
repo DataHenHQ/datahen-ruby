@@ -1,8 +1,8 @@
 module Datahen
   class CLI < Thor
     class Scraper < Thor
-      desc "list", "List scrapers"
 
+      desc "list", "List scrapers"
       long_desc <<-LONGDESC
         List all scrapers.
       LONGDESC
@@ -29,6 +29,7 @@ module Datahen
       option :cancel_current_job, type: :boolean, desc: 'Set true to cancel currently active job if scheduler starts. Default: false'
       option :schedule, type: :string, desc: 'Set the schedule of the scraper to run. Must be in CRON format.'
       option :timezone, type: :string, desc: "Set the scheduler's timezone. Must be in IANA Timezone format. Defaults to \"America/Toronto\""
+      option :profile, type: :string, desc: 'Set the profiles (comma separated) to apply to the job. Default: default'
       def create(scraper_name, git_repository)
         # puts "options #{options}"
         client = Client::Scraper.new(options)
@@ -51,6 +52,7 @@ module Datahen
       option :cancel_current_job, type: :boolean, desc: 'Set true to cancel currently active job if scheduler starts. Default: false'
       option :schedule, type: :string, desc: 'Set the schedule of the scraper to run. Must be in CRON format.'
       option :timezone, type: :string, desc: "Set the scheduler's timezone. Must be in IANA Timezone format. Defaults to \"America/Toronto\""
+      option :profile, type: :string, desc: 'Set the profiles (comma separated) to apply to the job. Default: default'
       def update(scraper_name)
         client = Client::Scraper.new(options)
         puts "#{client.update(scraper_name, options)}"

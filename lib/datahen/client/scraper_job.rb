@@ -29,6 +29,7 @@ module Datahen
         body[:standard_worker_count] = opts[:workers] if opts[:workers]
         body[:browser_worker_count] = opts[:browsers] if opts[:browsers]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
+        body[:profile] = opts[:profile] if opts[:profile]
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}/current_job", params)
@@ -47,6 +48,12 @@ module Datahen
       def pause(scraper_name, opts={})
         opts[:status] = 'paused'
         update(scraper_name, opts)
+      end
+
+      def profile(job_id, opts={})
+        params = @options.merge(opts)
+
+        self.class.get("/jobs/#{job_id}/profile", params)
       end
     end
   end

@@ -2,7 +2,7 @@ module Datahen
   class CLI < Thor
     class EnvVar < Thor
       desc "list", "List environment variables on the account"
-      
+
       long_desc <<-LONGDESC
         List all environment variables on the account.
       LONGDESC
@@ -19,7 +19,7 @@ module Datahen
           <name>: Var name can only consist of alphabets, numbers, underscores. Name must be unique to your account, otherwise it will be overwritten.\x5
           <value>: Value of variable.\x5
           LONGDESC
-      option :secret, type: :boolean, desc: 'Set true to make it decrypt the value. Default: false' 
+      option :secret, type: :boolean, desc: 'Set true to make it decrypt the value. Default: false'
       def set(name, value)
         # puts "options #{options}"
         client = Client::EnvVar.new(options)
@@ -37,10 +37,6 @@ module Datahen
         client = Client::EnvVar.new(options)
         puts "#{client.unset(name)}"
       end
-
-
-      
-
 
     end
   end

@@ -16,6 +16,7 @@ require 'datahen/cli/parser'
 require 'datahen/cli/seeder'
 require 'datahen/cli/finisher'
 require 'datahen/cli/env_var'
+require 'datahen/cli/account'
 
 
 
@@ -41,5 +42,8 @@ module Datahen
 
     desc "var SUBCOMMAND ...ARGS", "for environment variable related activities"
     subcommand "var", EnvVar
+
+    desc "account SUBCOMMAND ...ARGS", "for account related activities"
+    subcommand "account", Account
   end
 end

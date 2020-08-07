@@ -1,4 +1,5 @@
 require "datahen/client/base"
+require "datahen/client/account"
 require "datahen/client/auth_token"
 require "datahen/client/deploy_key"
 require 'datahen/client/export'
@@ -23,7 +24,6 @@ require "datahen/client/scraper_var"
 require "datahen/client/job_var"
 require "datahen/client/scraper_job_var"
 require "datahen/client/job_finisher"
-
 
 module Datahen
   module Client
