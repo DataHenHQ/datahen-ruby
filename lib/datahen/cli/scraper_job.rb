@@ -68,13 +68,14 @@ module Datahen
         Pauses a scraper's current job
       LONGDESC
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      option :force, :aliases => :f, type: :boolean, desc: 'Force a job to be paused from a done or cancelled status'
       def pause(scraper_name)
         if options[:job]
           client = Client::Job.new(options)
-          puts "#{client.pause(options[:job])}"
+          puts "#{client.pause(options[:job], options)}"
         else
           client = Client::ScraperJob.new(options)
-          puts "#{client.pause(scraper_name)}"
+          puts "#{client.pause(scraper_name, options)}"
         end
       end
 

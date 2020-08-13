@@ -58,6 +58,7 @@ module Datahen
         query[:limit] = opts[:limit] if opts[:limit]
         query[:order] = opts[:order] if opts[:order]
         query[:filter] = opts[:filter] if opts[:filter]
+        query[:force] = opts[:force] if opts[:force]
 
         if opts[:query]
           if opts[:query].is_a?(Hash)
