@@ -26,6 +26,7 @@ module Datahen
         body[:schedule] = opts[:schedule] if opts[:schedule]
         body[:timezone] = opts[:timezone] if opts[:timezone]
         body[:profile] = opts[:profile] if opts[:profile]
+        body[:multiple_jobs] = opts[:multiple_jobs] if opts[:multiple_jobs]
         params = @options.merge({body: body.to_json})
         self.class.post("/scrapers", params)
       end
@@ -45,6 +46,7 @@ module Datahen
         body[:schedule] = opts[:schedule] if opts[:schedule]
         body[:timezone] = opts[:timezone] if opts[:timezone]
         body[:profile] = opts[:profile] if opts[:profile]
+        body[:multiple_jobs] = opts[:multiple_jobs] if opts.has_key?("multiple_jobs") || opts.has_key?(:multiple_jobs)
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}", params)
