@@ -16,7 +16,7 @@ module Datahen
             role: role,
             description: description}
 
-        params = @options.merge({body: body.to_json})
+        params = @options.merge({body: body.to_json}).merge(opts)
         self.class.post("/auth_tokens", params)
       end
 
