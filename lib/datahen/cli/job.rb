@@ -6,7 +6,6 @@ module Datahen
         "#{basename} #{@package_name} #{command.usage}"
       end
 
-
       desc "list", "gets a list of jobs"
       option :page, :aliases => :p, type: :numeric, desc: 'Get the next set of records by page.'
       option :per_page, :aliases => :P, type: :numeric, desc: 'Number of records per page. Max 500 per page.'
@@ -35,8 +34,7 @@ module Datahen
         client = Client::JobStat.new(options)
         puts "#{client.job_current_stats(job_id, options)}"
       end
-
-
+      
     end
   end
 

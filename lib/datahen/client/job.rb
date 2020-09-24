@@ -71,6 +71,11 @@ module Datahen
         self.class.get("/jobs/#{job_id}/profile", params)
       end
 
+      def delete(job_id, opts={})
+        params = @options.merge(opts)
+        self.class.delete("/jobs/#{job_id}", params)
+      end
+
     end
 
   end

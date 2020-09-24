@@ -48,6 +48,21 @@ module Datahen
         end
       end
 
+      desc "delete <scraper_name>", "delete a scraper's current job"
+      long_desc <<-LONGDESC
+        Delete a scraper's current job
+      LONGDESC
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      def delete(scraper_name)
+        if options[:job]
+          client = Client::Job.new(options)
+          puts "#{client.delete(options[:job])}"
+        else
+          client = Client::ScraperJob.new(options)
+          puts "#{client.delete(scraper_name)}"
+        end
+      end
+
       desc "resume <scraper_name>", "resumes a scraper's current job"
       long_desc <<-LONGDESC
         Resumes a scraper's current job
