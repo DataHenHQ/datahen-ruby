@@ -27,6 +27,7 @@ module Datahen
         body[:timezone] = opts[:timezone] if opts[:timezone]
         body[:profile] = opts[:profile] if opts[:profile]
         body[:multiple_jobs] = opts[:multiple_jobs] if opts[:multiple_jobs]
+        body[:max_job_count] = opts[:max_job_count] if opts[:max_job_count]
         params = @options.merge({body: body.to_json})
         self.class.post("/scrapers", params)
       end
@@ -47,6 +48,7 @@ module Datahen
         body[:timezone] = opts[:timezone] if opts[:timezone]
         body[:profile] = opts[:profile] if opts[:profile]
         body[:multiple_jobs] = opts[:multiple_jobs] if opts.has_key?("multiple_jobs") || opts.has_key?(:multiple_jobs)
+        body[:max_job_count] = opts[:max_job_count] if opts.has_key?("max_job_count") || opts.has_key?(:max_job_count)
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}", params)

@@ -31,6 +31,7 @@ module Datahen
       option :timezone, type: :string, desc: "Set the scheduler's timezone. Must be in IANA Timezone format. Defaults to \"America/Toronto\""
       option :profile, type: :string, desc: 'Set the profiles (comma separated) to apply to the job. Default: default'
       option :multiple_jobs, type: :boolean, desc: 'Set true to enable multiple jobs. Default: false'
+      option :max_job_count, type: :numeric, desc: 'Set a value to set max number of jobs available. Set -1 for unlimited. Default: 3'
       def create(scraper_name, git_repository)
         # puts "options #{options}"
         client = Client::Scraper.new(options)
@@ -55,6 +56,7 @@ module Datahen
       option :timezone, type: :string, desc: "Set the scheduler's timezone. Must be in IANA Timezone format. Defaults to \"America/Toronto\""
       option :profile, type: :string, desc: 'Set the profiles (comma separated) to apply to the job. Default: default'
       option :multiple_jobs, type: :boolean, desc: 'Set true to enable multiple jobs. Default: false'
+      option :max_job_count, type: :numeric, desc: 'Set a value to set max number of jobs available. Set -1 for unlimited. Default: 3'
       def update(scraper_name)
         client = Client::Scraper.new(options)
         puts "#{client.update(scraper_name, options)}"
