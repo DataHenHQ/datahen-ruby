@@ -224,7 +224,10 @@ module Datahen
 
         if result['available'] == true
           puts "Preview content url: \"#{result['preview_url']}\""
-          `open "#{result['preview_url']}"`
+          begin
+            `open "#{result['preview_url']}"`
+          rescue
+          end
         else
           puts "Content does not exist"
         end
@@ -244,7 +247,10 @@ module Datahen
 
         if result['available'] == true
           puts "Preview failed content url: \"#{result['preview_url']}\""
-          `open "#{result['preview_url']}"`
+          begin
+            `open "#{result['preview_url']}"`
+          rescue
+          end
         else
           puts "Failed Content does not exist"
         end

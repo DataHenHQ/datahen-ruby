@@ -36,7 +36,10 @@ module Datahen
 
         if result['signed_url']
           puts "Download url: \"#{result['signed_url']}\""
-          `open "#{result['signed_url']}"`
+          begin
+            `open "#{result['signed_url']}"`
+          rescue
+          end
         else
           puts "Exported file does not exist"
         end
