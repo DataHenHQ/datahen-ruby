@@ -26,7 +26,7 @@ module Datahen
         self.class.put("/scrapers/#{scraper_name}/current_job/pages/refetch", params)
       end
 
-      # Deprecated, please use Datahen::Client::JobVar#refetch instead.
+      # Deprecated, please use Datahen::Client::JobPage#refetch instead.
       #
       # @note This method will be removed at some point in the future.
       def refetch_by_job(job_id, opts={})
@@ -37,6 +37,11 @@ module Datahen
       def reparse(scraper_name, opts={})
         params = @options.merge(opts)
         self.class.put("/scrapers/#{scraper_name}/current_job/pages/reparse", params)
+      end
+
+      def limbo(scraper_name, opts={})
+        params = @options.merge(opts)
+        self.class.put("/scrapers/#{scraper_name}/current_job/pages/limbo", params)
       end
 
       def enqueue(scraper_name, method, url, opts={})

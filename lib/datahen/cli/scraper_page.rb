@@ -111,6 +111,7 @@ module Datahen
           puts "Must specify either a --gid, --fetch-fail, --parse-fail or --status"
           return
         end
+
         if options[:job]
           client = Client::JobPage.new(options)
           puts "#{client.refetch(options[:job])}"
@@ -129,26 +130,39 @@ module Datahen
       option :status, type: :string, desc: 'Reparse only pages with a specific status.'
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       def reparse(scraper_name)
-        begin
-          options[:vars] = JSON.parse(options[:vars]) if options[:vars]
+        if !options.key?(:gid) && !options.key?(:parse_fail) && !options.key?(:status)
+          puts "Must specify either a --gid, --parse-fail or --status"
+          return
+        end
 
-          if !options.key?(:gid) && !options.key?(:parse_fail) && !options.key?(:status)
-            puts "Must specify either a --gid, --parse-fail or --status"
-            return
-          end
+        if options[:job]
+          client = Client::JobPage.new(options)
+          puts "#{client.reparse(options[:job])}"
+        else
+          client = Client::ScraperJobPage.new(options)
+          puts "#{client.reparse(scraper_name)}"
+        end
+      end
 
-          if options[:job]
-            client = Client::JobPage.new(options)
-            puts "#{client.reparse(options[:job])}"
-          else
-            client = Client::ScraperJobPage.new(options)
-            puts "#{client.reparse(scraper_name)}"
-          end
+      desc "limbo <scraper_name>", "Move pages on a scraper's current job to limbo"
+      long_desc <<-LONGDESC
+        Move pages in a scraper's current job to limbo. You need to specify either a --gid or --status.\x5
+      LONGDESC
+      option :gid, :aliases => :g, type: :string, desc: 'Move a specific GID to limbo'
+      option :status, type: :string, desc: 'Move pages with a specific status to limbo.'
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      def limbo(scraper_name)
+        if !options.key?(:gid) && !options.key?(:status)
+          puts "Must specify either a --gid or --status"
+          return
+        end
 
-        rescue JSON::ParserError
-          if options[:vars]
-            puts "Error: #{options[:vars]} on vars is not a valid JSON"
-          end
+        if options[:job]
+          client = Client::JobPage.new(options)
+          puts "#{client.limbo(options[:job])}"
+        else
+          client = Client::ScraperJobPage.new(options)
+          puts "#{client.limbo(scraper_name)}"
         end
       end
 

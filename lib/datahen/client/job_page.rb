@@ -72,6 +72,11 @@ module Datahen
         params = @options.merge(opts)
         self.class.put("/jobs/#{job_id}/pages/refetch", params)
       end
+
+      def limbo(job_id, opts={})
+        params = @options.merge(opts)
+        self.class.put("/jobs/#{job_id}/pages/limbo", params)
+      end
     end
   end
 end
