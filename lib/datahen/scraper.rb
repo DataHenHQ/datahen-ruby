@@ -1,3 +1,4 @@
+require "datahen/error"
 require "datahen/plugin"
 require "datahen/scraper/parser"
 require "datahen/scraper/seeder"

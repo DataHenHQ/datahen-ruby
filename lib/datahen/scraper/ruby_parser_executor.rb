@@ -112,7 +112,7 @@ module Datahen
         raise ArgumentError.new("page_gid needs to be a String.") unless page_gid.is_a?(String)
         if page_gid == gid
           self.refetch_self = true
-          return
+          raise Error::SafeTerminateError
         end
         refetch_page page_gid
       end
@@ -130,7 +130,7 @@ module Datahen
         raise ArgumentError.new("page_gid needs to be a String.") unless page_gid.is_a?(String)
         if page_gid == gid
           self.reparse_self = true
-          return
+          raise Error::SafeTerminateError
         end
         reparse_page page_gid
       end
@@ -153,6 +153,8 @@ module Datahen
               page: page
             })
             eval_with_context filename, context
+          rescue Error::SafeTerminateError => e
+            # do nothing, this is fine
           rescue SyntaxError => e
             handle_error(e) if save
             raise e
@@ -163,7 +165,7 @@ module Datahen
 
           puts "=========== Parsing Executed ==========="
           begin
-            save_pages_and_outputs(pages, outputs, :parsing)
+            save_pages_and_outputs(pages, outputs, :parsing) unless refetch_self
           rescue => e
             handle_error(e) if save
             raise e
