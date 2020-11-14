@@ -1,7 +1,7 @@
 module Datahen
   module Scraper
     class Parser
-      def self.exec_parser_page(filename, gid, job_id=nil, save=false, vars = {}, keep_outputs=false)
+      def self.exec_parser_page(filename, gid, job_id=nil, save=false, vars = {}, keep_outputs=false, content_file=nil, page_stub=nil, local_copy_prefix=nil)
         extname = File.extname(filename)
         case extname
         when '.rb'
@@ -10,7 +10,10 @@ module Datahen
             gid: gid,
             job_id: job_id,
             vars: vars,
-            keep_outputs: keep_outputs
+            keep_outputs: keep_outputs,
+            content_file: content_file,
+            page_stub: page_stub,
+            local_copy_prefix: local_copy_prefix
           )
           executor.exec_parser(save)
         else

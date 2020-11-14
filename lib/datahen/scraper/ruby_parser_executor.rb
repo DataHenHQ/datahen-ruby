@@ -10,12 +10,27 @@ module Datahen
       # @return [Boollean]
       attr_accessor :reparse_self
 
+      # Ignore GID and use the content file itself
+      attr_accessor :use_content_file
+
+
       def initialize(options={})
-        @filename = options.fetch(:filename) { raise "Filename is required"}
-        @gid = options.fetch(:gid) { raise "GID is required"}
+        @filename = options.fetch(:filename) { raise "Filename is required"} 
         @job_id = options.fetch(:job_id)
         @page_vars = options.fetch(:vars) { {} }
         @keep_outputs = !!(options.fetch(:keep_outputs) { false })
+        @page_stub = options.fetch(:page_stub) { nil }
+        @content_file = options.fetch(:content_file) { nil }
+        @local_copy_prefix = options.fetch(:local_copy_prefix) { nil }
+        @gid = options.fetch(:gid) { nil }
+
+        if !@page_stub.nil? 
+          @page_stub['gid'] = "nogid.nogid-00000000000000000000000000000000" if @page_stub['gid'].nil?
+          @gid = @page_stub['gid'] 
+        end
+        if !@gid && !@content_file
+          raise "GID or Content File is required"
+        end
       end
 
       def self.exposed_methods
@@ -139,7 +154,7 @@ module Datahen
         update_parsing_starting_status
 
         proc = Proc.new do
-          page = init_page
+          page = !@page_stub.nil? ? @page_stub : init_page
           outputs = []
           pages = []
           page = init_page_vars(page)
@@ -164,12 +179,17 @@ module Datahen
           end
 
           puts "=========== Parsing Executed ==========="
+          # save to local first
+          save_pages_and_outputs_to_local(pages, outputs) unless local_copy_prefix.nil?
+          # then save to server
           begin
             save_pages_and_outputs(pages, outputs, :parsing) unless refetch_self
           rescue => e
             handle_error(e) if save
             raise e
           end
+
+          
 
           if refetch_self
             refetch_page gid
@@ -183,11 +203,19 @@ module Datahen
       end
 
       def content
-        @content ||= get_content(job_id, gid)
+        if !@content_file.nil?
+          @content ||= open_content_file(@content_file)
+        else
+          @content ||= get_content(job_id, gid)
+        end
       end
 
       def failed_content
-        @failed_content ||= get_failed_content(job_id, gid)
+        if !@content_file.nil?
+          @failed_content ||= open_content_file(@content_file)
+        else
+          @failed_content ||= get_failed_content(job_id, gid)
+        end
       end
 
       def handle_error(e)

@@ -8,6 +8,9 @@ module Datahen
 
       attr_accessor :filename, :gid, :job_id
 
+      # If specified, will also save outputs, pages, and logs into their respective local files
+      attr_accessor :local_copy_prefix
+
       include Datahen::Plugin::ContextExposer
 
       def exec_parser(save=false)
@@ -78,6 +81,10 @@ module Datahen
         else
           nil
         end
+      end
+
+      def open_content_file(filepath)
+        File.read(filepath)
       end
 
       def get_failed_content(job_id, gid)
@@ -273,7 +280,7 @@ module Datahen
             page_dups_ignored = pages_dup_count > 0 ? " (#{pages_dup_count} dups ignored)" : ''
             log_msgs << "#{pages_slice.count} out of #{total_pages} Pages#{page_dups_ignored}"
 
-            unless save
+            if !save && local_copy_prefix.nil?
               puts '----------------------------------------'
               puts "Trying to validate #{log_msgs.last}#{page_dups_ignored}"
               puts JSON.pretty_generate pages_slice
@@ -284,7 +291,7 @@ module Datahen
             output_dups_ignored = outputs_dup_count > 0 ? " (#{outputs_dup_count} dups ignored)" : ''
             log_msgs << "#{outputs_slice.count} out of #{total_outputs} Outputs#{output_dups_ignored}"
 
-            unless save
+            if !save && local_copy_prefix.nil?
               puts '----------------------------------------'
               puts "Trying to validate #{log_msgs.last}#{output_dups_ignored}"
               puts JSON.pretty_generate outputs_slice
@@ -299,7 +306,7 @@ module Datahen
           else
             save_status = "#{status}_try"
           end
-
+          
           # saving to server
           response = update_to_server(
             job_id: job_id,
@@ -342,6 +349,16 @@ module Datahen
 
       def save_type
         raise NotImplementedError.new('Need to implement "save_type" method.')
+      end
+
+      def save_pages_and_outputs_to_local(pages=[], outputs=[])
+        if local_copy_prefix.nil?
+          raise "need to specify :local_copy_prefix variable during init"
+        end
+        pages_file = "#{local_copy_prefix}-pages.json"
+        outputs_file = "#{local_copy_prefix}-outputs.json"
+        File.write(pages_file, JSON.generate(pages))
+        File.write(outputs_file, JSON.generate(outputs))
       end
 
       # Saves pages from an array and clear it.

@@ -45,5 +45,13 @@ module Datahen
 
     desc "account SUBCOMMAND ...ARGS", "for account related activities"
     subcommand "account", Account
+
+    def self.redirect_logs_to(local_copy_prefix=nil)
+      if local_copy_prefix.nil?
+        raise "need to specify :local_copy_prefix variable during init"
+      end
+      $stdout.reopen("#{local_copy_prefix}-stdout.txt", "w")
+      $stderr.reopen("#{local_copy_prefix}-stdout.txt", "w")
+    end
   end
 end
