@@ -50,8 +50,8 @@ module Datahen
       if local_copy_prefix.nil?
         raise "need to specify :local_copy_prefix variable during init"
       end
-      $stdout.reopen("#{local_copy_prefix}-stdout.txt", "w")
-      $stderr.reopen("#{local_copy_prefix}-stdout.txt", "w")
+      $stdout.reopen("#{local_copy_prefix}-stdout.txt", "a+")
+      $stderr.reopen("#{local_copy_prefix}-stdout.txt", "a+")
     end
   end
 end
