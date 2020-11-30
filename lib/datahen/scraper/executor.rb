@@ -11,6 +11,9 @@ module Datahen
       # If specified, will also save outputs, pages, and logs into their respective local files
       attr_accessor :local_copy_prefix
 
+      # specifies whether to save the outputs, and pages onto the server
+      attr_accessor :server_validation
+
       include Datahen::Plugin::ContextExposer
 
       def exec_parser(save=false)
@@ -266,6 +269,13 @@ module Datahen
       end
 
       def save_pages_and_outputs(pages = [], outputs = [], status)
+
+        # save to local first, if specified
+        save_pages_and_outputs_to_local(pages, outputs) unless local_copy_prefix.nil?
+        
+        # if server_validation is false and not save
+        return if !save && !server_validation
+
         total_pages = pages.count
         total_outputs = outputs.count
         records_per_slice = 100

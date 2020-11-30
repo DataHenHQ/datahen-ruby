@@ -14,6 +14,7 @@ module Datahen
       option :"content-file", :aliases => :c, type: :string, desc: 'Specify a path to a content file that will be parsed.'
       option :"page-stub", :aliases => :b, type: :string, desc: 'Specify a Page metadata stub. GID will be overwritten if GID is present within the Page stub.'
       option :"local-copy-prefix", type: :string, desc: 'Copies the outputs, pages, and logs to a specific named local files. ex: foo will save the following files: foo-outputs.json foo-pages.json foo-logs.txt'
+      option :"server-validation", type: :boolean, default: true, desc: 'Saves the outputs and pages onto the DataHen server.'
       def try_parse(scraper_name, parser_file, gid)
         begin
 
@@ -32,7 +33,7 @@ module Datahen
 
           vars = JSON.parse(options[:vars]) if options[:vars]
           page_stub = JSON.parse(options[:"page-stub"]) if options[:"page-stub"]
-          puts Datahen::Scraper::Parser.exec_parser_page(parser_file, gid, job_id, false, vars, options[:"keep-outputs"], options[:"content-file"], page_stub, options[:"local-copy-prefix"])
+          puts Datahen::Scraper::Parser.exec_parser_page(parser_file, gid, job_id, false, vars, options[:"keep-outputs"], options[:"content-file"], page_stub, options[:"local-copy-prefix"], options[:"server-validation"])
 
           rescue JSON::ParserError
           if options[:vars]

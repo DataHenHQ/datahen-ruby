@@ -23,6 +23,7 @@ module Datahen
         @content_file = options.fetch(:content_file) { nil }
         @local_copy_prefix = options.fetch(:local_copy_prefix) { nil }
         @gid = options.fetch(:gid) { nil }
+        @server_validation = options.fetch(:server_validation) { true }
 
         if !@page_stub.nil? 
           @page_stub['gid'] = "nogid.nogid-00000000000000000000000000000000" if @page_stub['gid'].nil?
@@ -179,9 +180,6 @@ module Datahen
           end
 
           puts "=========== Parsing Executed ==========="
-          # save to local first
-          save_pages_and_outputs_to_local(pages, outputs) unless local_copy_prefix.nil?
-          # then save to server
           begin
             save_pages_and_outputs(pages, outputs, :parsing) unless refetch_self
           rescue => e
