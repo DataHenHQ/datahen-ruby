@@ -19,13 +19,14 @@ module Datahen
         @job_id = options.fetch(:job_id)
         @page_vars = options.fetch(:vars) { {} }
         @keep_outputs = !!(options.fetch(:keep_outputs) { false })
-        @page_stub = options.fetch(:page_stub) { nil }
+        @page_stub_file = options.fetch(:page_stub_file) { nil }
         @content_file = options.fetch(:content_file) { nil }
         @local_copy_prefix = options.fetch(:local_copy_prefix) { nil }
         @gid = options.fetch(:gid) { nil }
         @server_validation = options.fetch(:server_validation) { true }
 
-        if !@page_stub.nil? 
+        if !@page_stub_file.nil? 
+          @page_stub = JSON.parse(File.read(@page_stub_file))
           @page_stub['gid'] = "nogid.nogid-00000000000000000000000000000000" if @page_stub['gid'].nil?
           @gid = @page_stub['gid'] 
         end
