@@ -11,6 +11,13 @@ module Datahen
         body[:standard_worker_count] = opts[:workers] if opts[:workers]
         body[:browser_worker_count] = opts[:browsers] if opts[:browsers]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
+        if opts[:vars]
+          if opts[:vars].is_a?(Array)
+            body[:vars] = opts[:vars]
+          elsif opts[:vars].is_a?(String)
+            body[:vars] = JSON.parse(opts[:vars])
+          end
+        end
         params = @options.merge({body: body.to_json})
         self.class.post("/scrapers/#{scraper_name}/jobs", params)
       end

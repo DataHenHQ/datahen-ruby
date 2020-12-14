@@ -93,6 +93,7 @@ module Datahen
       option :workers, :aliases => :w, type: :numeric, desc: 'Set how many standard workers to use. Default: 1'
       option :browsers, type: :numeric, desc: 'Set how many browser workers to use. Default: 0'
       option :proxy_type, desc: 'Set the Proxy type. Default: standard'
+      option :vars, type: :string, banner: :JSON, desc: 'Set input vars. Must be in json format. i.e: {"name":"foo", "value":"bar", "secret":false} '
       def start(scraper_name)
         client = Client::ScraperJob.new(options)
         puts "Starting a scrape job..."
