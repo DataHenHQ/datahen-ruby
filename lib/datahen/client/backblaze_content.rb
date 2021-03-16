@@ -27,10 +27,10 @@ module Datahen
             # heavily improve content read recovery by using "String#<<",
             #  reading all "good" lines and then concat the remaining chars
             begin
-              gz.each_line{|line| content << line}
+              gz.each_line{|line| _content << line}
             rescue => e
               begin
-                content << gz.readchar while !gz.eof
+                _content << gz.readchar while !gz.eof
               rescue => e
                 puts "Ignored Zlib error: #{e.to_s}"
               end
