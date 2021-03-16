@@ -44,6 +44,8 @@ module Datahen
               pages: pages
             })
             eval_with_context filename, context
+          rescue Error::SafeTerminateError => e
+            # do nothing, this is fine
           rescue SyntaxError => e
             handle_error(e) if save
             raise e

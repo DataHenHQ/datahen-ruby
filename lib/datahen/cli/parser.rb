@@ -14,20 +14,19 @@ module Datahen
       def try_parse(scraper_name, parser_file, gid)
         begin
 
-            if options[:job]
-              job_id = options[:job]
-            elsif options[:global]
-              job_id = nil
-            else
-              job = Client::ScraperJob.new(options).find(scraper_name)
-              job_id = job['id']
-            end
-
+          if options[:job]
+            job_id = options[:job]
+          elsif options[:global]
+            job_id = nil
+          else
+            job = Client::ScraperJob.new(options).find(scraper_name)
+            job_id = job['id']
+          end
 
           vars = JSON.parse(options[:vars]) if options[:vars]
           puts Datahen::Scraper::Parser.exec_parser_page(parser_file, gid, job_id, false, vars, options[:"keep-outputs"])
 
-          rescue JSON::ParserError
+        rescue JSON::ParserError
           if options[:vars]
             puts "Error: #{options[:vars]} on vars is not a valid JSON"
           end

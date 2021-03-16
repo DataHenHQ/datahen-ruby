@@ -374,6 +374,11 @@ module Datahen
       def eval_with_context file_path, context
         eval(File.read(file_path), context, file_path)
       end
+
+      # Finish the executor execution
+      def finish
+        raise Error::SafeTerminateError
+      end
     end
   end
 end

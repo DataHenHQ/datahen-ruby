@@ -40,6 +40,8 @@ module Datahen
               job_id: job_id
             })
             eval_with_context filename, context
+          rescue Error::SafeTerminateError => e
+            # do nothing, this is fine
           rescue SyntaxError => e
             handle_error(e) if save
             raise e
@@ -55,7 +57,7 @@ module Datahen
             handle_error(e) if save
             raise e
           end
-          
+
           update_finisher_done_status
         end
         proc.call
