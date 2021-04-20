@@ -7,7 +7,7 @@ module Datahen
       include HTTParty
 
       def get_content(url)
-        self.class.get(url, format: :plain)
+        self.class.get(url, format: :plain).response.body
       end
 
       def get_gunzipped_content(url)
