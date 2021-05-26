@@ -1,6 +1,7 @@
 require "datahen/error"
 require "datahen/plugin"
 require "datahen/scraper/parser"
+require "datahen/scraper/batch_parser"
 require "datahen/scraper/seeder"
 require "datahen/scraper/finisher"
 require "datahen/scraper/executor"

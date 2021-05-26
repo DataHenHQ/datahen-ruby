@@ -6,7 +6,7 @@ module Datahen
       # Max allowed page size when query outputs (see #find_outputs).
       MAX_FIND_OUTPUTS_PER_PAGE = 500
 
-      attr_accessor :filename, :gid, :job_id
+      attr_accessor :filename, :page, :gid, :job_id
 
       include Datahen::Plugin::ContextExposer
 
@@ -15,6 +15,9 @@ module Datahen
       end
 
       def init_page()
+        # skip whenever a page is provided
+        return self.page unless self.page.nil?
+
         if job_id
           puts "getting Job Page"
           init_job_page

@@ -12,7 +12,8 @@ module Datahen
 
       def initialize(options={})
         @filename = options.fetch(:filename) { raise "Filename is required"}
-        @gid = options.fetch(:gid) { raise "GID is required"}
+        @page = options.fetch(:page) { nil }
+        @gid = (self.page || {})['gid'] || options.fetch(:gid) { raise "GID or a page with a GID is required"}
         @job_id = options.fetch(:job_id)
         @page_vars = options.fetch(:vars) { {} }
         @keep_outputs = !!(options.fetch(:keep_outputs) { false })
@@ -46,6 +47,8 @@ module Datahen
       end
 
       def init_page_vars(page)
+        return self.page unless self.page.nil?
+
         if !@page_vars.nil? && !@page_vars.empty?
           page['vars'] = @page_vars
         end

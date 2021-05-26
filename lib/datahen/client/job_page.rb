@@ -42,6 +42,16 @@ module Datahen
         self.class.post("/jobs/#{job_id}/pages", params)
       end
 
+      def dequeue(job_id, limit, page_types, parse_fetching_failed, opts = {})
+        body = {
+          limit: limit,
+          page_types: page_types,
+          parse_fetching_failed: parse_fetching_failed
+        }
+        params = @options.merge({body: body.to_json})
+        self.class.post("/jobs/#{job_id}/pages/parse_dequeue", params)
+      end
+
       def parsing_update(job_id, gid, opts={})
         body = {}
         body[:outputs] = opts.fetch(:outputs) {[]}
