@@ -80,6 +80,12 @@ module Datahen
           job_id = job['id']
         end
 
+        # make the stdout and stderr sync to prevent buffering
+        old_stdout_sync = $stdout.sync
+        old_stderr_sync = $stderr.sync
+        $stdout.sync = true
+        $stderr.sync = true
+
         begin
           batch = Datahen::Scraper::BatchParser.new job_id, config_file,
             worker_count: options[:"workers"],
@@ -90,6 +96,10 @@ module Datahen
         rescue => e
           puts e
         end
+
+        # resume whatever state the stdout and stderr sync were
+        $stdout.sync = old_stdout_sync
+        $stderr.sync = old_stderr_sync
       end
     end
   end
