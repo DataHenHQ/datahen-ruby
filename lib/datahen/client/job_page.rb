@@ -49,7 +49,7 @@ module Datahen
           parse_fetching_failed: parse_fetching_failed
         }
         params = @options.merge({body: body.to_json})
-        self.class.post("/jobs/#{job_id}/pages/parse_dequeue", params)
+        self.class.put("/jobs/#{job_id}/pages/parse_dequeue", params)
       end
 
       def parsing_update(job_id, gid, opts={})
