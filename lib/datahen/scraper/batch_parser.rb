@@ -148,8 +148,9 @@ module Datahen
             begin
               self.load_pages
               self.class.wait self.dequeue_interval
-            rescue e
+            rescue Exception => e
               puts e
+              puts e.trace
             end
           end
         end
@@ -157,14 +158,19 @@ module Datahen
         dequeue = lambda{ self.dequeue_pages }
         Parallel.each(dequeue, in_threads: (worker_count)) do |page|
           parser_file = self.parsers[page['page_type']]
-          puts Datahen::Scraper::Parser.exec_parser_by_page(
-            parser_file,
-            page,
-            job_id,
-            save,
-            nil,
-            keep_outputs
-          )
+          begin
+            puts Datahen::Scraper::Parser.exec_parser_by_page(
+              parser_file,
+              page,
+              job_id,
+              save,
+              nil,
+              keep_outputs
+            )
+          rescue Exception => e
+            puts e
+            puts e.trace
+          end
         end
         keep_dequeue[0] = false
       end
