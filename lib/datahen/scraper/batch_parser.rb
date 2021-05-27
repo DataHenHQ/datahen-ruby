@@ -12,13 +12,7 @@ module Datahen
       attr_reader :job_id, :worker_count, :pages, :max_garbage
       attr_reader :dequeue_interval, :dequeue_scale
       attr_reader :page_types, :parsers
-      attr_reader :config, :client
-
-      def recollect_garbage
-        puts "Recollect garbage"
-        GC.start
-        self.garbage_count = 0
-      end
+      attr_reader :config, :client, :garbage_mutex
 
       def self.wait time_in_seconds
         Kernel.sleep time_in_seconds
@@ -29,7 +23,7 @@ module Datahen
           worker_count: 1,
           max_garbage: 5,
           dequeue_interval: 1,
-          dequeue_scale: 1.5,
+          dequeue_scale: 2,
           client_options: {}
         }.merge opts
 
@@ -38,12 +32,21 @@ module Datahen
         @dequeue_interval = opts[:dequeue_interval]
         @dequeue_scale = opts[:dequeue_scale]
         @max_garbage = opts[:max_garbage]
-        @pages = []
+        @pages = Concurrent::Hash.new
+        @garbage_mutex = Mutex.new
         self.garbage_count = 0
         self.config_file = config_file
         self.load_config
 
         @client = Datahen::Client::JobPage.new(opts[:client_options])
+      end
+
+      def recollect_garbage
+        self.garbage_mutex.synchronize do
+          puts "Recollect garbage"
+          GC.start
+          self.garbage_count = 0
+        end
       end
 
       def load_config
@@ -80,7 +83,7 @@ module Datahen
           dequeue_size,
           self.page_types,
           config['parse_fetching_failed']
-        #response = Client::JobPage.new(per_page: dequeue_size, status: 'to_parse', page: 1).all(self.job_id)
+        # response = Client::JobPage.new(per_page: dequeue_size, status: 'to_parse', page: 1).all(self.job_id)
 
         # ensure a valid response or try again
         if response.nil? || response.response.code.to_i != 200
@@ -92,8 +95,9 @@ module Datahen
         # add pages
         count = 0
         (JSON.parse(response.body) || []).each do |page|
-          self.pages << page
           count += 1
+          next if self.pages.has_key? page['gid']
+          self.pages[page['gid']] = page
         end
         response = nil
 
@@ -117,15 +121,11 @@ module Datahen
         end
 
         # return page if there are loeaded pages
-        return self.pages.shift if self.pages.length > 0
-
-        # keep trying to load new pages from API whenever the queue is empty
-        while self.load_pages < 1
-          self.class.wait self.dequeue_interval
+        while true do
+          key_value = self.pages.shift
+          return key_value[1] unless key_value.nil?
+          self.class.wait 1
         end
-
-        #Parallel::Stop
-        self.pages.shift
       end
 
       def exec_parse save = false, keep_outputs = false
@@ -135,8 +135,18 @@ module Datahen
         else
           self.no_repeat_puts "Spawing #{self.worker_count} workers"
         end
+
+        # dequeuing on parallel
+        keep_dequeue = Concurrent::Array.new
+        keep_dequeue[0] = true
+        Thread.new do
+          while keep_dequeue[0]
+            self.load_pages
+          end
+        end
+
         dequeue = lambda{ self.dequeue_pages }
-        Parallel.each(dequeue, in_threads: worker_count) do |page|
+        Parallel.each(dequeue, in_threads: (worker_count)) do |page|
           parser_file = self.parsers[page['page_type']]
           puts Datahen::Scraper::Parser.exec_parser_by_page(
             parser_file,
@@ -147,6 +157,7 @@ module Datahen
             keep_outputs
           )
         end
+        keep_dequeue[0] = false
       end
     end
   end
