@@ -70,8 +70,8 @@ module Datahen
       option :"keep-outputs", :aliases => :ko, type: :boolean, default: false, desc: "Don't delete existing outputs"
       option :"workers", type: :numeric, default: 1, desc: "Worker count"
       option :"max-garbage", type: :numeric, default: 5, desc: "Pages processed before calling the garbage collector"
-      option :"dequeue-interval", type: :numeric, default: 1000, desc: "Nanoseconds to wait between dequeueing"
-      option :"dequeue-scale", type: :numeric, default: 1.5, desc: "Scale vs worker count describing how many pages to dequeue"
+      option :"dequeue-interval", type: :numeric, default: 3, desc: "Seconds to wait between dequeueing"
+      option :"dequeue-scale", type: :numeric, default: 2, desc: "Scale vs worker count describing how many pages to dequeue"
       def batch_exec_parse(scraper_name, config_file)
         if options[:job]
           job_id = options[:job]

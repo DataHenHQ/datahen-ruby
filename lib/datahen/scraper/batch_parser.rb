@@ -22,7 +22,7 @@ module Datahen
         opts = {
           worker_count: 1,
           max_garbage: 5,
-          dequeue_interval: 1,
+          dequeue_interval: 3,
           dequeue_scale: 2,
           client_options: {}
         }.merge opts
@@ -74,16 +74,20 @@ module Datahen
       end
 
       def load_pages
-        dequeue_size = (self.worker_count * self.dequeue_scale).ceil - self.pages.length
+        # calculate dequeue size
+        max_dequeue_size = (self.worker_count * self.dequeue_scale).ceil
+        current_size = self.pages.length
+        dequeue_size = (self.dequeue_scale * (max_dequeue_size - current_size)).ceil
         if dequeue_size < 1
-          self.no_repeat_puts NO_DEQUEUE_COUNT_MSG
           return 0
         end
+        dequeue_size = max_dequeue_size if dequeue_size > max_dequeue_size
+
+        # reserve and get to pages parse
         response = client.dequeue self.job_id,
           dequeue_size,
           self.page_types,
           config['parse_fetching_failed']
-        # response = Client::JobPage.new(per_page: dequeue_size, status: 'to_parse', page: 1).all(self.job_id)
 
         # ensure a valid response or try again
         if response.nil? || response.response.code.to_i != 200
@@ -141,7 +145,12 @@ module Datahen
         keep_dequeue[0] = true
         Thread.new do
           while keep_dequeue[0]
-            self.load_pages
+            begin
+              self.load_pages
+              self.class.wait self.dequeue_interval
+            rescue e
+              puts e
+            end
           end
         end
 
