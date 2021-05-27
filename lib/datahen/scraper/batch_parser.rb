@@ -148,8 +148,8 @@ module Datahen
             begin
               self.load_pages
               self.class.wait self.dequeue_interval
-            rescue Exception => e
-              puts [e.message] + e.backtrace
+            rescue => e
+              puts [e.message] + e.backtrace rescue 'error'
             end
           end
         end
@@ -166,8 +166,8 @@ module Datahen
               nil,
               keep_outputs
             )
-          rescue Exception => e
-            puts [e.message] + e.backtrace
+          rescue => e
+            puts [e.message] + e.backtrace rescue 'error'
           end
         end
         keep_dequeue[0] = false
