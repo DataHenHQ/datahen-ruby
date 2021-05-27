@@ -94,7 +94,7 @@ module Datahen
             dequeue_scale: options[:"dequeue-scale"]
           batch.exec_parse true, options[:"keep-outputs"]
         rescue => e
-          puts e
+          puts [e.message] + e.backtrace
         end
 
         # resume whatever state the stdout and stderr sync were

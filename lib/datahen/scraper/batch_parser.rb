@@ -149,8 +149,7 @@ module Datahen
               self.load_pages
               self.class.wait self.dequeue_interval
             rescue Exception => e
-              puts e
-              puts e.trace
+              puts [e.message] + e.backtrace
             end
           end
         end
@@ -168,8 +167,7 @@ module Datahen
               keep_outputs
             )
           rescue Exception => e
-            puts e
-            puts e.trace
+            puts [e.message] + e.backtrace
           end
         end
         keep_dequeue[0] = false
