@@ -5,10 +5,10 @@ module Datahen
   module Scraper
     class BatchParser
       NOT_FOUND_MSG = "No more pages to parse found"
-      NO_DEQUEUE_COUNT_MSG = "Warning: Max page to parse dequeue count is 0, check pages to parse scale"
-      NO_WORKERS_MSG = "Warning: There are no parser workers"
+      NO_DEQUEUE_COUNT_MSG = "\nWarning: Max page to parse dequeue count is 0, check pages to parse scale\n"
+      NO_WORKERS_MSG = "\nWarning: There are no parser workers\n"
 
-      attr_accessor :config_file, :garbage_count, :last_message
+      attr_accessor :config_file, :garbage_count, :last_message, :second_dequeue_count
       attr_reader :job_id, :worker_count, :pages, :max_garbage
       attr_reader :dequeue_interval, :dequeue_scale
       attr_reader :page_types, :parsers
@@ -34,6 +34,7 @@ module Datahen
         @max_garbage = opts[:max_garbage]
         @pages = Concurrent::Hash.new
         @garbage_mutex = Mutex.new
+        self.second_dequeue_count = 0
         self.garbage_count = 0
         self.config_file = config_file
         self.load_config
@@ -43,9 +44,12 @@ module Datahen
 
       def recollect_garbage
         self.garbage_mutex.synchronize do
-          puts "Recollect garbage"
-          GC.start
-          self.garbage_count = 0
+          self.garbage_count += 1
+          if self.garbage_count > self.max_garbage
+            puts "Recollect garbage"
+            GC.start
+            self.garbage_count = 0
+          end
         end
       end
 
@@ -84,10 +88,18 @@ module Datahen
         dequeue_size = max_dequeue_size if dequeue_size > max_dequeue_size
 
         # reserve and get to pages parse
-        response = client.dequeue self.job_id,
-          dequeue_size,
-          self.page_types,
-          config['parse_fetching_failed']
+        response = nil
+        begin
+          response = client.dequeue self.job_id,
+            dequeue_size,
+            self.page_types,
+            config['parse_fetching_failed']
+        rescue Net::ReadTimeout, Net::OpenTimeout => e
+          self.no_repeat_puts "Dequeue API call timeout! Contact infra team, your job needs a profile change"
+          return 0
+        rescue => e
+          raise e
+        end
 
         # ensure a valid response or try again
         if response.nil? || response.response.code.to_i != 200
@@ -109,6 +121,7 @@ module Datahen
         if count > 0
           self.recollect_garbage
           self.repeat_puts "Found #{count} page(s) to parse"
+          self.second_dequeue_count += 1 unless self.second_dequeue_count > 1
         else
           self.no_repeat_puts NOT_FOUND_MSG
         end
@@ -119,15 +132,25 @@ module Datahen
 
       def dequeue_pages
         # collect garbage
-        self.garbage_count += 1
-        if self.garbage_count > self.max_garbage
-          self.recollect_garbage
-        end
+        self.recollect_garbage
 
         # return page if there are loeaded pages
+        is_waiting = false
         while true do
           key_value = self.pages.shift
-          return key_value[1] unless key_value.nil?
+          unless key_value.nil?
+            puts "[Worker #{Parallel.worker_number}]: Finish waiting" if is_waiting
+            return key_value[1]
+          end
+
+          # be more verbose on worker waiting
+          unless is_waiting
+            is_waiting = true
+            puts "[Worker #{Parallel.worker_number}]: Is waiting for a page..."
+            if self.second_dequeue_count > 1
+              puts "\nWARNING: Your job is not optimized, increase your job's \"parser_dequeue_scale\"\n"
+            end
+          end
           self.class.wait 1
         end
       end
@@ -140,11 +163,9 @@ module Datahen
           self.no_repeat_puts "Spawing #{self.worker_count} workers"
         end
 
-        # dequeuing on parallel
-        keep_dequeue = Concurrent::Array.new
-        keep_dequeue[0] = true
+        # dequeuing on parallel (the ride never ends :D)
         Thread.new do
-          while keep_dequeue[0]
+          while true
             begin
               self.load_pages
               self.class.wait self.dequeue_interval
@@ -152,8 +173,10 @@ module Datahen
               puts [e.message] + e.backtrace rescue 'error'
             end
           end
+          puts "Error: dequeuer died! D:"
         end
 
+        # process the pages
         dequeue = lambda{ self.dequeue_pages }
         Parallel.each(dequeue, in_threads: (worker_count)) do |page|
           parser_file = self.parsers[page['page_type']]
@@ -166,11 +189,14 @@ module Datahen
               nil,
               keep_outputs
             )
+          rescue Parallel::Kill => e
+            puts "[Worker #{Parallel.worker_number}]: Someone tried to kill Parallel!!!"
+          rescue Parallel::Break => e
+            puts "[Worker #{Parallel.worker_number}]: Someone tried to break Parallel!!!"
           rescue => e
             puts [e.message] + e.backtrace rescue 'error'
           end
         end
-        keep_dequeue[0] = false
       end
     end
   end
