@@ -48,7 +48,7 @@ module Datahen
           page_types: page_types,
           parse_fetching_failed: parse_fetching_failed
         }
-        params = @options.merge({body: body.to_json, timeout: 30})
+        params = @options.merge(opts).merge({body: body.to_json})
         self.class.put("/jobs/#{job_id}/pages/parse_dequeue", params)
       end
 

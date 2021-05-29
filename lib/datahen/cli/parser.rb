@@ -72,6 +72,7 @@ module Datahen
       option :"max-garbage", type: :numeric, default: 5, desc: "Pages processed before calling the garbage collector"
       option :"dequeue-interval", type: :numeric, default: 3, desc: "Seconds to wait between dequeueing"
       option :"dequeue-scale", type: :numeric, default: 2, desc: "Scale vs worker count describing how many pages to dequeue"
+      option :"dequeue-timeout", type: :numeric, default: 30, desc: "Dequeue pages API request timeout"
       def batch_exec_parse(scraper_name, config_file)
         if options[:job]
           job_id = options[:job]
