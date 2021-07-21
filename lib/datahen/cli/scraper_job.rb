@@ -104,6 +104,7 @@ module Datahen
       option :proxy_type, desc: 'Set the Proxy type. Default: standard'
       option :profile, type: :string, desc: 'Set the profiles (comma separated) to apply to the job. Default: default'
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      option :max_page_size, type: :numeric, desc: 'Set a value to set max page size when fetching a page. Set a value grather than 0 to set it as limit, 0 means any size. Default: 0'
       def update(scraper_name)
         if options[:job]
           client = Client::Job.new(options)

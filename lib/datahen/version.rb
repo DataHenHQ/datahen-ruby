@@ -1,3 +1,3 @@
 module Datahen
-  VERSION = "0.15.11"
+  VERSION = "0.16.0"
 end

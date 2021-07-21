@@ -21,6 +21,7 @@ module Datahen
         body[:browser_worker_count] = opts[:browsers] if opts[:browsers]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         body[:profile] = opts[:profile] if opts[:profile]
+        body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
         params = @options.merge({body: body.to_json})
 
         self.class.put("/jobs/#{job_id}", params)

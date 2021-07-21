@@ -32,6 +32,7 @@ module Datahen
       option :profile, type: :string, desc: 'Set the profiles (comma separated) to apply to the job. Default: default'
       option :multiple_jobs, type: :boolean, desc: 'Set true to enable multiple jobs. Default: false'
       option :max_job_count, type: :numeric, desc: 'Set a value to set max number of jobs available. Set -1 for unlimited. Default: 3'
+      option :max_page_size, type: :numeric, desc: 'Set a value to set max page size when fetching a page. Set a value grather than 0 to set it as limit, 0 means any size. Default: 0'
       def create(scraper_name, git_repository)
         # puts "options #{options}"
         client = Client::Scraper.new(options)
@@ -57,6 +58,7 @@ module Datahen
       option :profile, type: :string, desc: 'Set the profiles (comma separated) to apply to the job. Default: default'
       option :multiple_jobs, type: :boolean, desc: 'Set true to enable multiple jobs. Default: false'
       option :max_job_count, type: :numeric, desc: 'Set a value to set max number of jobs available. Set -1 for unlimited. Default: 3'
+      option :max_page_size, type: :numeric, desc: 'Set a value to set max page size when fetching a page. Set a value grather than 0 to set it as limit, 0 means any size. Default: 0'
       def update(scraper_name)
         client = Client::Scraper.new(options)
         puts "#{client.update(scraper_name, options)}"
@@ -94,6 +96,7 @@ module Datahen
       option :browsers, type: :numeric, desc: 'Set how many browser workers to use. Default: 0'
       option :proxy_type, desc: 'Set the Proxy type. Default: standard'
       option :vars, type: :string, banner: :JSON, desc: 'Set input vars. Must be in json format. i.e: [{"name":"foo", "value":"bar", "secret":false}] '
+      option :max_page_size, type: :numeric, desc: 'Set a value to set max page size when fetching a page. Set a value grather than 0 to set it as limit, 0 means any size. Default: 0'
       def start(scraper_name)
         client = Client::ScraperJob.new(options)
         puts "Starting a scrape job..."

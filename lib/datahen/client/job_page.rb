@@ -15,6 +15,7 @@ module Datahen
         body[:page_type] = opts[:page_type] if opts[:page_type]
         body[:priority] = opts[:priority] if opts[:priority]
         body[:vars] = opts[:vars] if opts[:vars]
+        body[:max_size] = opts[:max_size] if opts[:max_size]
 
         params = @options.merge({body: body.to_json})
 
@@ -36,6 +37,7 @@ module Datahen
         body[:ua_type] = opts[:ua_type] if opts[:ua_type]
         body[:no_redirect] = opts[:no_redirect] if opts[:no_redirect]
         body[:cookie] = opts[:cookie] if opts[:cookie]
+        body[:max_size] = opts[:max_size] if opts[:max_size]
 
         params = @options.merge({body: body.to_json})
 

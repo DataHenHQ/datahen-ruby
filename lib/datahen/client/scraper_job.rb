@@ -11,6 +11,7 @@ module Datahen
         body[:standard_worker_count] = opts[:workers] if opts[:workers]
         body[:browser_worker_count] = opts[:browsers] if opts[:browsers]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
+        body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
         if opts[:vars]
           if opts[:vars].is_a?(Array)
             body[:vars] = opts[:vars]
@@ -37,6 +38,7 @@ module Datahen
         body[:browser_worker_count] = opts[:browsers] if opts[:browsers]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         body[:profile] = opts[:profile] if opts[:profile]
+        body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}/current_job", params)

@@ -28,6 +28,7 @@ module Datahen
         body[:profile] = opts[:profile] if opts[:profile]
         body[:multiple_jobs] = opts[:multiple_jobs] if opts[:multiple_jobs]
         body[:max_job_count] = opts[:max_job_count] if opts[:max_job_count]
+        body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
         params = @options.merge({body: body.to_json})
         self.class.post("/scrapers", params)
       end
@@ -49,6 +50,7 @@ module Datahen
         body[:profile] = opts[:profile] if opts[:profile]
         body[:multiple_jobs] = opts[:multiple_jobs] if opts.has_key?("multiple_jobs") || opts.has_key?(:multiple_jobs)
         body[:max_job_count] = opts[:max_job_count] if opts.has_key?("max_job_count") || opts.has_key?(:max_job_count)
+        body[:max_page_size] = opts[:max_page_size] if opts.has_key?("max_page_size") || opts.has_key?(:max_page_size)
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}", params)
