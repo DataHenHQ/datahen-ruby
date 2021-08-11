@@ -334,6 +334,7 @@ module Datahen
         Parallel.each(dequeue, in_threads: (worker_count)) do |page|
           parser_file = self.parsers[page['page_type']]
           begin
+            self.repeat_puts("Parsing page with GID #{page['gid']}")
             puts Datahen::Scraper::Parser.exec_parser_by_page(
               parser_file,
               page,
@@ -342,6 +343,7 @@ module Datahen
               nil,
               keep_outputs
             )
+            self.repeat_puts("Finish parsing page with GID #{page['gid']}")
           rescue Parallel::Kill => e
             puts "[Worker #{Parallel.worker_number}]: Someone tried to kill Parallel!!!"
           rescue Parallel::Break => e
