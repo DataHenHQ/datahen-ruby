@@ -22,6 +22,7 @@ module Datahen
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         body[:profile] = opts[:profile] if opts[:profile]
         body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
+        body[:enable_global_cache] = opts[:enable_global_cache] if opts.has_key?("enable_global_cache") || opts.has_key?(:enable_global_cache)
         params = @options.merge({body: body.to_json})
 
         self.class.put("/jobs/#{job_id}", params)
