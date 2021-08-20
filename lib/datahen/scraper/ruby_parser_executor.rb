@@ -109,7 +109,7 @@ module Datahen
 
       def refetch_page gid
         if save
-          Client::ScraperJobPage.new({gid: gid}).refetch_by_job(self.job_id)
+          Client::JobPage.new({gid: gid}).refetch(self.job_id)
           puts "Refetch page #{gid}"
         else
           puts "Would have refetch page #{gid}"
@@ -127,7 +127,7 @@ module Datahen
 
       def reparse_page gid
         if save
-          Client::ScraperJobPage.new({gid: gid}).reparse_by_job(self.job_id)
+          Client::JobPage.new({gid: gid}).reparse(self.job_id)
           puts "Reparse page #{gid}"
         else
           puts "Would have reparse page #{gid}"
@@ -145,7 +145,7 @@ module Datahen
 
       def limbo_page gid
         if save
-          Client::ScraperJobPage.new({gid: gid}).limbo_by_job(self.job_id)
+          Client::JobPage.new({gid: gid}).limbo(self.job_id)
           puts "Limbo page #{gid}"
         else
           puts "Would have limbo page #{gid}"
