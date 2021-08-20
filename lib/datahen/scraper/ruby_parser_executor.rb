@@ -8,7 +8,11 @@ module Datahen
       attr_accessor :refetch_self
       # Reparse self page flag.
       # @return [Boollean]
+      # @note It is stronger than #limbo_self flag.
       attr_accessor :reparse_self
+      # Limbo self page flag.
+      # @return [Boollean]
+      attr_accessor :limbo_self
 
       def initialize(options={})
         @filename = options.fetch(:filename) { raise "Filename is required"}
@@ -31,7 +35,8 @@ module Datahen
           :find_output,
           :find_outputs,
           :refetch,
-          :reparse
+          :reparse,
+          :limbo
         ].freeze
       end
 
@@ -138,6 +143,24 @@ module Datahen
         reparse_page page_gid
       end
 
+      def limbo_page gid
+        if save
+          Client::ScraperJobPage.new({gid: gid}).limbo_by_job(self.job_id)
+          puts "Limbo page #{gid}"
+        else
+          puts "Would have limbo page #{gid}"
+        end
+      end
+
+      def limbo page_gid
+        raise ArgumentError.new("page_gid needs to be a String.") unless page_gid.is_a?(String)
+        if page_gid == gid
+          self.limbo_self = true
+          raise Error::SafeTerminateError
+        end
+        limbo_page page_gid
+      end
+
       def eval_parser_script(save=false)
         update_parsing_starting_status
 
@@ -148,6 +171,7 @@ module Datahen
           page = init_page_vars(page)
           self.refetch_self = false
           self.reparse_self = false
+          self.limbo_self = false
 
           begin
             context = isolated_binding({
@@ -178,6 +202,8 @@ module Datahen
             refetch_page gid
           elsif reparse_self
             reparse_page gid
+          elsif limbo_self
+            limbo_page gid
           else
             update_parsing_done_status
           end
