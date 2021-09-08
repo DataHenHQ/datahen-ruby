@@ -13,6 +13,7 @@ module Datahen
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
         body[:enable_global_cache] = opts[:enable_global_cache] if opts.has_key?("enable_global_cache") || opts.has_key?(:enable_global_cache)
+        body[:retry_interval] = opts[:retry_interval] if opts[:retry_interval]
         if opts[:vars]
           if opts[:vars].is_a?(Array)
             body[:vars] = opts[:vars]
@@ -41,6 +42,7 @@ module Datahen
         body[:profile] = opts[:profile] if opts[:profile]
         body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
         body[:enable_global_cache] = opts[:enable_global_cache] if opts.has_key?("enable_global_cache") || opts.has_key?(:enable_global_cache)
+        body[:retry_interval] = opts[:retry_interval] if opts[:retry_interval]
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}/current_job", params)

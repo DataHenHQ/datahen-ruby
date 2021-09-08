@@ -30,6 +30,7 @@ module Datahen
         body[:max_job_count] = opts[:max_job_count] if opts[:max_job_count]
         body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
         body[:enable_global_cache] = opts[:enable_global_cache] if opts.has_key?("enable_global_cache") || opts.has_key?(:enable_global_cache)
+        body[:retry_interval] = opts[:retry_interval] if opts[:retry_interval]
         params = @options.merge({body: body.to_json})
         self.class.post("/scrapers", params)
       end
@@ -53,6 +54,7 @@ module Datahen
         body[:max_job_count] = opts[:max_job_count] if opts.has_key?("max_job_count") || opts.has_key?(:max_job_count)
         body[:max_page_size] = opts[:max_page_size] if opts.has_key?("max_page_size") || opts.has_key?(:max_page_size)
         body[:enable_global_cache] = opts[:enable_global_cache] if opts.has_key?("enable_global_cache") || opts.has_key?(:enable_global_cache)
+        body[:retry_interval] = opts[:retry_interval] if opts[:retry_interval]
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}", params)

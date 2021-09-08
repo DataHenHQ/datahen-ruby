@@ -46,6 +46,7 @@ module Datahen
       option :ua_type, :aliases => :u, desc: 'Set user agent type. Default: desktop'
       option :no_redirect, :aliases => :n, type: :boolean, desc: 'Set true to not follow redirect. Default: false'
       option :max_size, type: :numeric, desc: 'Set a value to set max page size when fetching a page. Set a value grather than 0 to set it as limit, 0 means any size. Default: 0'
+      option :retry_interval, type: :numeric, desc: 'Set a value to set retry time interval on seconds when refetching a page. Set a value grather than 0 to set it as new time to refetch, 0 means default time. Default: 0'
       def add(scraper_name, url)
         begin
           options[:headers] = JSON.parse(options[:headers]) if options[:headers]
@@ -80,6 +81,7 @@ module Datahen
       option :priority, type: :numeric, desc: 'Set fetch priority. The higher the value, the sooner the page gets fetched. Default: 0'
       option :vars, :aliases => :v, type: :string, desc: 'Set user-defined page variables. Must be in json format. i.e: {"Foo":"bar"}'
       option :max_size, type: :numeric, desc: 'Set a value to set max page size when fetching a page. Set a value grather than 0 to set it as limit, 0 means any size. Default: 0'
+      option :retry_interval, type: :numeric, desc: 'Set a value to set retry time interval on seconds when refetching a page. Set a value grather than 0 to set it as new time to refetch, 0 means default time. Default: 0'
       def update(scraper_name, gid)
         begin
           options[:vars] = JSON.parse(options[:vars]) if options[:vars]
