@@ -16,9 +16,8 @@ require 'datahen/cli/parser'
 require 'datahen/cli/seeder'
 require 'datahen/cli/finisher'
 require 'datahen/cli/env_var'
+require 'datahen/cli/account_deploy_key'
 require 'datahen/cli/account'
-
-
 
 module Datahen
   class CLI < Thor

@@ -11,6 +11,9 @@ module Datahen
         puts "#{client.profile()}"
       end
 
+      desc "deploy_key SUBCOMMAND ...ARGS", "manage deploy key"
+      subcommand "deploy_key", AccountDeployKey
+
     end
   end
 
