@@ -17,7 +17,8 @@ module Datahen
       def update(job_id, opts={})
         body = {}
         body[:status] = opts[:status] if opts[:status]
-        body[:standard_worker_count] = opts[:workers] if opts[:workers]
+        body[:parser_worker_count] = opts[:parsers] if opts[:parsers]
+        body[:fetcher_worker_count] = opts[:fetchers] if opts[:fetchers]
         body[:browser_worker_count] = opts[:browsers] if opts[:browsers]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         body[:profile] = opts[:profile] if opts[:profile]

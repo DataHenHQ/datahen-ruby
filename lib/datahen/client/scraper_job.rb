@@ -8,7 +8,8 @@ module Datahen
 
       def create(scraper_name, opts={})
         body = {}
-        body[:standard_worker_count] = opts[:workers] if opts[:workers]
+        body[:parser_worker_count] = opts[:parsers] if opts[:parsers]
+        body[:fetcher_worker_count] = opts[:fetchers] if opts[:fetchers]
         body[:browser_worker_count] = opts[:browsers] if opts[:browsers]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
@@ -36,7 +37,8 @@ module Datahen
       def update(scraper_name, opts={})
         body = {}
         body[:status] = opts[:status] if opts[:status]
-        body[:standard_worker_count] = opts[:workers] if opts[:workers]
+        body[:parser_worker_count] = opts[:parsers] if opts[:parsers]
+        body[:fetcher_worker_count] = opts[:fetchers] if opts[:fetchers]
         body[:browser_worker_count] = opts[:browsers] if opts[:browsers]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         body[:profile] = opts[:profile] if opts[:profile]

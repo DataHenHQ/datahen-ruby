@@ -99,8 +99,9 @@ module Datahen
       long_desc <<-LONGDESC
         Updates a scraper's current job.
       LONGDESC
-      option :workers, :aliases => :w, type: :numeric, desc: 'Set how many standard workers to use. Scraper job must be restarted(paused then resumed, or cancelled then resumed) for it to take effect. Default: 1. '
-      option :browsers, type: :numeric, desc: 'Set how many browser workers to use. Scraper job must be restarted(paused then resumed, or cancelled then resumed) for it to take effect. Default: 0. '
+      option :parsers, :aliases => :pw, type: :numeric, desc: 'Set how many parser workers to use. Scraper job must be restarted (paused then resumed) for it to take effect. Default: 1. '
+      option :fetchers, :aliases => :fw, type: :numeric, desc: 'Set how many fetcher workers to use. Scraper job must be restarted (paused then resumed) for it to take effect. Default: 1. '
+      option :browsers, :aliases => :bw, type: :numeric, desc: 'Set how many browser workers to use. Scraper job must be restarted (paused then resumed) for it to take effect. Default: 0. '
       option :proxy_type, desc: 'Set the Proxy type. Default: standard'
       option :profile, type: :string, desc: 'Set the profiles (comma separated) to apply to the job. Default: default'
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'

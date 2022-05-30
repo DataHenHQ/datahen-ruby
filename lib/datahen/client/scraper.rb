@@ -18,7 +18,8 @@ module Datahen
         body[:git_branch] = opts[:branch] || opts[:git_branch] || "master" if opts[:branch] || opts[:git_branch]
         body[:freshness_type] = opts[:freshness_type] if opts[:freshness_type]
         body[:force_fetch] = opts[:force_fetch] if opts[:force_fetch]
-        body[:standard_worker_count] = opts[:workers] || opts[:standard_worker_count] if opts[:workers] || opts[:standard_worker_count]
+        body[:parser_worker_count] = opts[:parsers] || opts[:parser_worker_count] if opts[:parsers] || opts[:parser_worker_count]
+        body[:fetcher_worker_count] = opts[:fetchers] || opts[:fetcher_worker_count] if opts[:fetchers] || opts[:fetcher_worker_count]
         body[:browser_worker_count] = opts[:browsers] || opts[:browser_worker_count] if opts[:browsers] || opts[:browser_worker_count]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         body[:disable_scheduler] = opts[:disable_scheduler] if opts[:disable_scheduler]
@@ -42,7 +43,8 @@ module Datahen
         body[:git_branch] = opts[:branch] || opts[:git_branch] if opts[:branch] || opts[:git_branch]
         body[:freshness_type] = opts[:freshness_type] if opts[:freshness_type]
         body[:force_fetch] = opts[:force_fetch] if opts.has_key?("force_fetch") || opts.has_key?(:force_fetch)
-        body[:standard_worker_count] = opts[:workers] || opts[:standard_worker_count] if opts[:workers] || opts[:standard_worker_count]
+        body[:parser_worker_count] = opts[:parsers] || opts[:parser_worker_count] if opts[:parsers] || opts[:parser_worker_count]
+        body[:fetcher_worker_count] = opts[:fetchers] || opts[:fetcher_worker_count] if opts[:fetchers] || opts[:fetcher_worker_count]
         body[:browser_worker_count] = opts[:browsers] || opts[:browser_worker_count] if opts[:browsers] || opts[:browser_worker_count]
         body[:proxy_type] = opts[:proxy_type] if opts[:proxy_type]
         body[:disable_scheduler] = opts[:disable_scheduler] if opts.has_key?("disable_scheduler") || opts.has_key?(:disable_scheduler)
