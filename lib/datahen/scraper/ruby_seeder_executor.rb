@@ -3,6 +3,8 @@ module Datahen
     class RubySeederExecutor < Executor
       attr_accessor :save
 
+      FIND_OUTPUTS_RETRY_LIMIT = nil
+
       def initialize(options={})
         @filename = options.fetch(:filename) { raise "Filename is required"}
         @job_id = options[:job_id]

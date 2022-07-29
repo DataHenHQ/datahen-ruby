@@ -68,7 +68,10 @@ module Datahen
 
         params = @options.merge({body: body.to_json})
 
-        self.class.put("/jobs/#{job_id}/pages/#{gid}/parsing_update", params)
+        limit = opts.has_key?(:retry_limit) ? opts.fetch(:retry_limit) : self.default_retry_limit[:parser]
+        self.retry(limit, 5, "Error while updating the parser.") do
+          self.class.put("/jobs/#{job_id}/pages/#{gid}/parsing_update", params)
+        end
       end
 
       def find_content(job_id, gid)

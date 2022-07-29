@@ -55,7 +55,10 @@ module Datahen
 
         params = @options.merge({body: body.to_json})
 
-        self.class.put("/jobs/#{job_id}/seeding_update", params)
+        limit = opts.has_key?(:retry_limit) ? opts.fetch(:retry_limit) : self.default_retry_limit[:seeder]
+        self.retry(limit, 5, "Error while updating the seeder.") do
+          self.class.put("/jobs/#{job_id}/seeding_update", params)
+        end
       end
 
       def finisher_update(job_id, opts={})
@@ -66,7 +69,10 @@ module Datahen
 
         params = @options.merge({body: body.to_json})
 
-        self.class.put("/jobs/#{job_id}/finisher_update", params)
+        limit = opts.has_key?(:retry_limit) ? opts.fetch(:retry_limit) : self.default_retry_limit[:finisher]
+        self.retry(limit, 5, "Error while updating the finisher.") do
+          self.class.put("/jobs/#{job_id}/finisher_update", params)
+        end
       end
 
       def profile(job_id, opts={})

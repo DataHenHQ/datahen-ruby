@@ -152,7 +152,7 @@ module Datahen
         @page_types = []
         @parsers = Concurrent::Hash.new
         @config = YAML.load_file(config_file)
-        self.config['parsers'].each do |v|
+        (self.config['parsers'] || []).each do |v|
           next if !v['disabled'].nil? && !!v['disabled']
           @page_types << v['page_type']
           self.parsers[v['page_type']] = v['file']

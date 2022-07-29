@@ -5,6 +5,7 @@ module Datahen
     class Executor
       # Max allowed page size when query outputs (see #find_outputs).
       MAX_FIND_OUTPUTS_PER_PAGE = 500
+      FIND_OUTPUTS_RETRY_LIMIT = 0
 
       attr_accessor :filename, :page, :gid, :job_id
 
@@ -159,13 +160,18 @@ module Datahen
         options = {
           query: query,
           page: page,
-          per_page: per_page}
+          per_page: per_page
+        }
 
         # Get job_id
         query_job_id = opts[:job_id] || get_job_id(opts[:scraper_name], self.job_id)
 
+        # find outputs
+        retry_limit = opts.has_key?(:retry_limit) ? opts[:retry_limit] : self.class::FIND_OUTPUTS_RETRY_LIMIT
         client = Client::JobOutput.new(options)
-        response = client.all(query_job_id, collection)
+        response = client.all(query_job_id, collection, {
+          retry_limit: retry_limit
+        })
 
         if response.code != 200
           raise "response_code: #{response.code}|#{response.parsed_response}"
@@ -304,6 +310,7 @@ module Datahen
           end
 
           # saving to server
+
           response = update_to_server(
             job_id: job_id,
             gid: gid,

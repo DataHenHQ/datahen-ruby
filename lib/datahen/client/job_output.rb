@@ -5,9 +5,11 @@ module Datahen
         self.class.get("/jobs/#{job_id}/output/collections/#{collection}/records/#{id}", @options)
       end
 
-      def all(job_id, collection = 'default')
-
-        self.class.get("/jobs/#{job_id}/output/collections/#{collection}/records", @options)
+      def all(job_id, collection = 'default', opts = {})
+        limit = opts.has_key?(:retry_limit) ? opts.fetch(:retry_limit) : 0
+        self.retry(limit, 10, "Error while updating the seeder.") do
+          self.class.get("/jobs/#{job_id}/output/collections/#{collection}/records", @options)
+        end
       end
 
       def collections(job_id)
@@ -16,4 +18,3 @@ module Datahen
     end
   end
 end
-

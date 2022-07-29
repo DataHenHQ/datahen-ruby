@@ -7,6 +7,12 @@ module Datahen
 
       default_timeout 60
 
+      DEFAULT_RETRY_LIMIT = {
+        seeder: nil,
+        parser: 2,
+        finisher: nil
+      }
+
       def self.env_auth_token
         ENV['DATAHEN_TOKEN']
       end
@@ -33,6 +39,42 @@ module Datahen
         @auth_token = value
       end
 
+      def default_retry_limit
+        @default_retry_limit ||= DEFAULT_RETRY_LIMIT.dup
+      end
+
+      def left_merge target, source
+        # validate source and target
+        return {} if target.nil? || !target.is_a?(Hash)
+        return target if source.nil? || !source.is_a?(Hash)
+
+        # left merge source into target
+        target.merge(source.select{|k,v|target.has_key?(k)})
+      end
+
+      def retry times, delay = nil, err_msg = nil
+        limit = times.nil? ? nil : times.to_i
+        delay = delay.nil? ? 5 : delay.to_i
+        count = 0
+        begin
+          yield
+        rescue StandardError => e
+          STDERR.puts(e.inspect)
+
+          # wait before retry (default 5 sec)
+          sleep(delay) if delay > 0
+
+          # raise error when retry limit is reached
+          raise e unless limit.nil? || count < limit
+
+          # retry with a 100+ failsafe to prevent overflow error due integer limit
+          should_aprox = limit.nil? && count > 99
+          count += 1 unless should_aprox
+          puts "#{err_msg.nil? ? '' : "#{err_msg} "}Retry \##{count}#{should_aprox ? '+' : ''}..."
+          retry
+        end
+      end
+
       def initialize(opts={})
         @ignore_ssl = opts[:ignore_ssl]
         self.class.base_uri(env_api_url)
@@ -44,6 +86,9 @@ module Datahen
           },
           verify: !ignore_ssl
         }
+
+        # extract and merge retry limits
+        @default_retry_limit = self.left_merge(DEFAULT_RETRY_LIMIT, opts[:retry_limit])
 
         query = {}
         query[:p] = opts[:page] if opts[:page]
