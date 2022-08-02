@@ -9,7 +9,7 @@ module Datahen
 
       DEFAULT_RETRY_LIMIT = {
         seeder: nil,
-        parser: 2,
+        parser: nil,
         finisher: nil
       }
 

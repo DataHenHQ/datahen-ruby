@@ -14,7 +14,7 @@ module Datahen
       # @return [Boollean]
       attr_accessor :limbo_self
 
-      FIND_OUTPUTS_RETRY_LIMIT = 2
+      FIND_OUTPUTS_RETRY_LIMIT = nil
 
       def initialize(options={})
         @filename = options.fetch(:filename) { raise "Filename is required"}
