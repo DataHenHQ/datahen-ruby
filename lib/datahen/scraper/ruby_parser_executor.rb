@@ -38,7 +38,8 @@ module Datahen
           :find_outputs,
           :refetch,
           :reparse,
-          :limbo
+          :limbo,
+          :finish
         ].freeze
       end
 

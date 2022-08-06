@@ -15,7 +15,8 @@ module Datahen
           :outputs,
           :save_outputs,
           :find_output,
-          :find_outputs
+          :find_outputs,
+          :finish
         ].freeze
       end
 
