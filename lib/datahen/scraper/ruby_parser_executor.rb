@@ -27,6 +27,8 @@ module Datahen
 
       def self.exposed_methods
         [
+          :get_content,
+          :get_failed_content,
           :content,
           :failed_content,
           :outputs,
