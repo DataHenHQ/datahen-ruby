@@ -18,6 +18,7 @@ require 'datahen/cli/finisher'
 require 'datahen/cli/env_var'
 require 'datahen/cli/account_deploy_key'
 require 'datahen/cli/account'
+require 'datahen/version'
 
 module Datahen
   class CLI < Thor
@@ -44,5 +45,10 @@ module Datahen
 
     desc "account SUBCOMMAND ...ARGS", "for account related activities"
     subcommand "account", Account
+
+    desc "version", "Shows the gem version"
+    def version()
+      puts "#{VERSION}"
+    end
   end
 end
