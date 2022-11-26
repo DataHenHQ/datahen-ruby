@@ -1,5 +1,3 @@
-require "datahen/error"
-require "datahen/plugin"
 require "datahen/scraper/parser"
 require "datahen/scraper/batch_parser"
 require "datahen/scraper/seeder"
@@ -8,7 +6,6 @@ require "datahen/scraper/executor"
 require "datahen/scraper/ruby_parser_executor"
 require "datahen/scraper/ruby_seeder_executor"
 require "datahen/scraper/ruby_finisher_executor"
-require "datahen/client"
 
 module Datahen
   module Scraper

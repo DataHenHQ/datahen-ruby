@@ -21,8 +21,8 @@ module Datahen
         ENV['DATAHEN_IGNORE_SSL'].to_s.strip == '1'
       end
 
-      def self.random_sleep max_seconds = 2
-        sleep((rand*max_seconds*1000.0).to_i/1000.0)
+      def self.random_delay max_seconds = 2
+        (rand * max_seconds * 1000.0).to_i / 1000.0
       end
 
       def env_api_url
@@ -62,11 +62,15 @@ module Datahen
         count = 0
         begin
           yield
-        rescue StandardError => e
-          STDERR.puts(e.inspect)
+        rescue Error::CustomRetryError, StandardError => e
+          is_custom_retry = e.is_a? Error::CustomRetryError
+          real_delay = is_custom_retry ? e.delay : delay
+          err_msg = is_custom_retry ? e.error : e.inspect
+          
+          STDERR.puts(err_msg)
 
           # wait before retry (default 5 sec)
-          sleep(delay) if delay > 0
+          sleep(delay) if real_delay > 0
 
           # raise error when retry limit is reached
           raise e unless limit.nil? || count < limit

@@ -58,9 +58,8 @@ module Datahen
         limit = opts.has_key?(:retry_limit) ? opts.fetch(:retry_limit) : self.default_retry_limit[:seeder]
         self.retry(limit, 5, "Error while updating the seeder.") do
           response = self.class.put("/jobs/#{job_id}/seeding_update", params)
-          if response.code == 500 && response.body.to_s =~ /pq:\s*deadlock/i
-            self.class.random_sleep
-            raise StandardError.new(response.body.to_s)
+          if response.code == 422 && response.body.to_s =~ /pq:\s*deadlock/i
+            raise CustomRetryError.new(self.class.random_delay(5), response.body.to_s)
           end
           response
         end
@@ -77,9 +76,8 @@ module Datahen
         limit = opts.has_key?(:retry_limit) ? opts.fetch(:retry_limit) : self.default_retry_limit[:finisher]
         self.retry(limit, 5, "Error while updating the finisher.") do
           response = self.class.put("/jobs/#{job_id}/finisher_update", params)
-          if response.code == 500 && response.body.to_s =~ /pq:\s*deadlock/
-            self.class.random_sleep
-            raise StandardError.new(response.body.to_s)
+          if response.code == 422 && response.body.to_s =~ /pq:\s*deadlock/
+            raise CustomRetryError.new(self.class.random_delay(5), response.body.to_s)
           end
           response
         end

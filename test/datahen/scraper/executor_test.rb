@@ -66,7 +66,7 @@ describe 'executor' do
           }
         ]
         key_defaults = {'aaa' =>  'DDD'}
-        dup_count = @executor.remove_old_dups! list, key_defaults
+        @executor.remove_old_dups! list, key_defaults
         expected = [
           {
             'aaa': 'AAA',
@@ -155,7 +155,7 @@ describe 'executor' do
           }
         ]
         key_defaults = {'aaa' => 'AAA'}
-        dup_count = @executor.remove_old_dups! list, key_defaults
+        @executor.remove_old_dups! list, key_defaults
         expected = [
           {
             aaa: '111',
@@ -198,7 +198,7 @@ describe 'executor' do
           }
         ]
         key_defaults = {'aaa' => nil}
-        dup_count = @executor.remove_old_dups! list, key_defaults
+        @executor.remove_old_dups! list, key_defaults
         expected = [
           {
             bbb: 'BBB',
@@ -245,7 +245,7 @@ describe 'executor' do
           '_collection' => 'my_collection',
           'name' => 'GGG'
         }
-        dup_count = @executor.remove_old_output_dups! outputs
+        @executor.remove_old_output_dups! outputs
         expected = [
           {
             _id: 'aaa',
@@ -288,7 +288,7 @@ describe 'executor' do
           '_collection' => 'my_collection',
           'name' => 'GGG'
         }
-        dup_count = @executor.remove_old_output_dups! outputs
+        @executor.remove_old_output_dups! outputs
         expected = [
           {
             '_collection' => 'my_collection',
@@ -318,7 +318,7 @@ describe 'executor' do
           'gid' => 'aaa',
           'url' => 'https://example.com/bbb'
         }
-        dup_count = @executor.remove_old_page_dups! pages
+        @executor.remove_old_page_dups! pages
         expected = [
           {
             'gid' => 'aaa',

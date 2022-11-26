@@ -1,5 +1,5 @@
 require 'thor'
-require 'datahen/scraper'
+require 'datahen'
 require 'datahen/cli/scraper_var'
 require 'datahen/cli/scraper_exporter'
 require 'datahen/cli/scraper_export'
@@ -18,7 +18,6 @@ require 'datahen/cli/finisher'
 require 'datahen/cli/env_var'
 require 'datahen/cli/account_deploy_key'
 require 'datahen/cli/account'
-require 'datahen/version'
 
 module Datahen
   class CLI < Thor
