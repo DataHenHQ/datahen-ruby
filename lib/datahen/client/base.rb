@@ -21,6 +21,10 @@ module Datahen
         ENV['DATAHEN_IGNORE_SSL'].to_s.strip == '1'
       end
 
+      def self.random_sleep max_seconds = 2
+        sleep((rand*max_seconds*1000.0).to_i/1000.0)
+      end
+
       def env_api_url
         ENV['DATAHEN_API_URL'].nil? ? 'https://app.datahen.com/api/v1' : ENV['DATAHEN_API_URL']
       end
