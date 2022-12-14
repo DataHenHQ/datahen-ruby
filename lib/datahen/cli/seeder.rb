@@ -34,7 +34,7 @@ module Datahen
           job_id = job['id']
         end
 
-        puts Datahen::Scraper::Seeder.exec_seeder(seeder_file, job_id, true)
+        puts Datahen::Scraper::Seeder.exec_seeder(seeder_file, job_id, true, options[:"keep-outputs"])
       end
     end
   end
