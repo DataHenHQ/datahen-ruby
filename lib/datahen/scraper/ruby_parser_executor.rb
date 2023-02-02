@@ -108,16 +108,32 @@ module Datahen
         end
       end
 
+      def update_parsing_status page_gid, status
+        return unless save
+
+        response = parsing_update(
+          job_id: job_id,
+          gid: page_gid,
+          parsing_status: status)
+
+        if response.code == 200
+          puts "Page #{page_gid} status changed to #{status}."
+        else
+          puts "Error: Unable to change page  #{page_gid} status: #{response.body} to #{status}"
+          raise "Unable to change page  #{page_gid} status: #{response.body} to #{status}"
+        end
+      end
+
       def save_type
         :parsing
       end
 
-      def refetch_page gid
+      def refetch_page page_gid
         if save
-          Client::JobPage.new({gid: gid}).refetch(self.job_id)
-          puts "Refetch page #{gid}"
+          update_parsing_status page_gid, :to_refetch
+          puts "Refetch page #{page_gid}"
         else
-          puts "Would have refetch page #{gid}"
+          puts "Would have refetch page #{page_gid}"
         end
       end
 
@@ -130,12 +146,12 @@ module Datahen
         refetch_page page_gid
       end
 
-      def reparse_page gid
+      def reparse_page page_gid
         if save
-          Client::JobPage.new({gid: gid}).reparse(self.job_id)
-          puts "Reparse page #{gid}"
+          update_parsing_status page_gid, :to_reparse
+          puts "Reparse page #{page_gid}"
         else
-          puts "Would have reparse page #{gid}"
+          puts "Would have reparse page #{page_gid}"
         end
       end
 
@@ -148,12 +164,12 @@ module Datahen
         reparse_page page_gid
       end
 
-      def limbo_page gid
+      def limbo_page page_gid
         if save
-          Client::JobPage.new({gid: gid}).limbo(self.job_id)
-          puts "Limbo page #{gid}"
+          update_parsing_status page_gid, :limbo
+          puts "Limbo page #{page_gid}"
         else
-          puts "Would have limbo page #{gid}"
+          puts "Would have limbo page #{page_gid}"
         end
       end
 
@@ -204,13 +220,13 @@ module Datahen
           end
 
           if refetch_self
-            refetch_page gid
+            update_parsing_status gid, :to_refetch
           elsif reparse_self
-            reparse_page gid
+            update_parsing_status gid, :to_reparse
           elsif limbo_self
-            limbo_page gid
+            update_parsing_status gid, :limbo
           else
-            update_parsing_done_status
+            update_parsing_status gid, :done
           end
         end
         proc.call
