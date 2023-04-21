@@ -133,6 +133,21 @@ module Datahen
         end
       end
 
+      desc "sync_schema <scraper_name>", "deploy schema config"
+      long_desc <<-LONGDESC
+        Deploy a scraper's schema config
+      LONGDESC
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      def sync_schema(scraper_name)
+        if options[:job]
+          client = Client::Job.new(options)
+          puts "#{client.sync_schema(options[:job])}"
+        else
+          client = Client::ScraperJob.new(options)
+          puts "#{client.sync_schema(scraper_name)}"
+        end
+      end
+
       desc "var SUBCOMMAND ...ARGS", "for managing scraper's job variables"
       subcommand "var", ScraperJobVar
 

@@ -75,6 +75,11 @@ module Datahen
         params = @options.merge(opts)
         self.class.delete("/scrapers/#{scraper_name}/current_job", params)
       end
+
+      def sync_schema(scraper_name, opts={})
+        params = @options.merge(opts)
+        self.class.put("/scrapers/#{scraper_name}/current_job/sync/schema", params)
+      end
     end
   end
 end

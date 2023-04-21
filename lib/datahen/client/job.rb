@@ -94,6 +94,12 @@ module Datahen
         self.class.delete("/jobs/#{job_id}", params)
       end
 
+      def sync_schema(job_id, opts={})
+        params = @options.merge(opts)
+
+        self.class.put("/sync/jobs/#{job_id}/schema", params)
+      end
+
     end
 
   end

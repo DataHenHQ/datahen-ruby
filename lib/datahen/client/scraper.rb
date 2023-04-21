@@ -72,6 +72,7 @@ module Datahen
 
         self.class.get("/scrapers/#{scraper_name}/profile", params)
       end
+
     end
   end
 end
