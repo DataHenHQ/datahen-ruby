@@ -28,46 +28,48 @@ module Datahen
         end
       end
 
-      desc "add <scraper_name> <url>", "Enqueues a page to a scraper's current job"
+      desc "add <scraper_name> <page_json>", "Enqueues a page to a scraper's current job"
       long_desc <<-LONGDESC
           Enqueues a page to a scraper's current job\x5
           LONGDESC
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
-      option :method, :aliases => :m, type: :string, desc: 'Set request method. Default: GET'
-      option :headers, :aliases => :H, type: :string, banner: :JSON, desc: 'Set request headers. Must be in json format. i.e: {"Foo":"bar"} '
-      option :cookie, :aliases => :c, type: :string, desc: 'Set request cookie.'
-      option :vars, :aliases => :v, type: :string, banner: :JSON, desc: 'Set user-defined page variables. Must be in json format. i.e: {"Foo":"bar"}'
-      option :page_type, :aliases => :t, desc: 'Set page type'
-      option :priority, type: :numeric, desc: 'Set fetch priority. The higher the value, the sooner the page gets fetched. Default: 0'
-      option :fetch_type, :aliases => :F, desc: 'Set fetch type. Default: http'
-      option :body, :aliases => :b, desc: 'Set request body'
-      option :force_fetch, :aliases => :f, type: :boolean, desc: 'Set true to force fetch page that is not within freshness criteria. Default: false'
-      option :freshness, :aliases => :s, desc: 'Set how fresh the page cache is. Accepts timestap format.'
-      option :ua_type, :aliases => :u, desc: 'Set user agent type. Default: desktop'
-      option :no_redirect, :aliases => :n, type: :boolean, desc: 'Set true to not follow redirect. Default: false'
-      option :max_size, type: :numeric, desc: 'Set a value to set max page size when fetching a page. Set a value grather than 0 to set it as limit, 0 means any size. Default: 0'
-      option :retry_interval, type: :numeric, desc: 'Set a value to set retry time interval on seconds when refetching a page. Set a value grather than 0 to set it as new time to refetch, 0 means default time. Default: 0'
-      def add(scraper_name, url)
+      def add(scraper_name, page_json)
         begin
-          options[:headers] = JSON.parse(options[:headers]) if options[:headers]
-          options[:vars] = JSON.parse(options[:vars]) if options[:vars]
-          method = options[:method]
+          page = JSON.parse(page_json)
 
           if options[:job]
             client = Client::JobPage.new(options)
-            puts "#{client.enqueue(options[:job], method, url, options)}"
+            puts "#{client.enqueue(options[:job], page, options)}"
           else
             client = Client::ScraperJobPage.new(options)
-            puts "#{client.enqueue(scraper_name, method, url, options)}"
+            puts "#{client.enqueue(scraper_name, page, options)}"
           end
 
         rescue JSON::ParserError
-          if options[:headers]
-            puts "Error: #{options[:headers]} on headers is not a valid JSON"
+            puts "Error: Invalid JSON"
+        end
+      end
+
+
+      desc "getgid <scraper_name> <page_json>", "Get the generated GID for a scraper's current job"
+      long_desc <<-LONGDESC
+          Get the generated GID for a scraper's current job.\x5
+          LONGDESC
+      option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
+      def getgid(scraper_name, page_json)
+        begin
+          page = JSON.parse(page_json)
+          
+          if options[:job]
+            client = Client::JobPage.new(options)
+            puts "#{client.get_gid(options[:job], page,  options)}"
+          else
+            client = Client::ScraperJobPage.new(options)
+            puts "#{client.get_gid(scraper_name, page, options)}"
           end
-          if options[:vars]
-            puts "Error: #{options[:vars]} on vars is not a valid JSON"
-          end
+
+        rescue JSON::ParserError
+          puts "Error: Invalid JSON"
         end
       end
 

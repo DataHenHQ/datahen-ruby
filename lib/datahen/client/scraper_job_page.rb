@@ -47,28 +47,17 @@ module Datahen
         self.class.put("/scrapers/#{scraper_name}/current_job/pages/limbo", params)
       end
 
-      def enqueue(scraper_name, method, url, opts={})
-        body = {}
-        body[:method] =  method != "" ? method : "GET"
-        body[:url] =  url
-        body[:page_type] = opts[:page_type] if opts[:page_type]
-        body[:priority] = opts[:priority] if opts[:priority]
-        body[:fetch_type] = opts[:fetch_type] if opts[:fetch_type]
-        body[:body] = opts[:body] if opts[:body]
-        body[:headers] = opts[:headers] if opts[:headers]
-        body[:vars] = opts[:vars] if opts[:vars]
-        body[:force_fetch] = opts[:force_fetch] if opts[:force_fetch]
-        body[:freshness] = opts[:freshness] if opts[:freshness]
-        body[:ua_type] = opts[:ua_type] if opts[:ua_type]
-        body[:no_redirect] = opts[:no_redirect] if opts[:no_redirect]
-        body[:cookie] = opts[:cookie] if opts[:cookie]
-        body[:max_size] = opts[:max_size] if opts[:max_size]
-        body[:enable_global_cache] = opts[:enable_global_cache] if opts.has_key?("enable_global_cache") || opts.has_key?(:enable_global_cache)
-        body[:retry_interval] = opts[:retry_interval] if opts[:retry_interval]
-
-        params = @options.merge({body: body.to_json})
+      def enqueue(scraper_name, page, opts={})
+      params = @options.merge(opts).merge({body: page.to_json})
 
         self.class.post("/scrapers/#{scraper_name}/current_job/pages", params)
+      end
+
+      def get_gid(scraper_name, page, opts={})
+      
+        params = @options.merge(opts).merge({body: page.to_json})
+
+        self.class.post("/scrapers/#{scraper_name}/current_job/generate_gid", params)
       end
 
       def find_content(scraper_name, gid)
