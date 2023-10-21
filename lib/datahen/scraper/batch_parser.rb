@@ -311,7 +311,7 @@ module Datahen
             is_waiting = true
             puts "[Worker #{Parallel.worker_number}]: Is waiting for a page..."
             if self.second_dequeue_count > 1 && !self.not_found
-              puts "\nWARNING: Your job is not optimized, increase your job's \"parser_dequeue_scale\"\n"
+              puts "\nWARNING: Your job might not be optimized. Consider increasing your job's \"parser_dequeue_scale\" if the `to_parse` queue is not empty or near empty \n"
             end
           end
           self.class.wait 1
