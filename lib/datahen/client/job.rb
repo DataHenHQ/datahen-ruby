@@ -25,6 +25,9 @@ module Datahen
         body[:max_page_size] = opts[:max_page_size] if opts[:max_page_size]
         body[:enable_global_cache] = opts[:enable_global_cache] if opts.has_key?("enable_global_cache") || opts.has_key?(:enable_global_cache)
         body[:retry_interval] = opts[:retry_interval] if opts[:retry_interval]
+        body[:soft_fetching_try_limit] = opts[:soft_fetching_try_limit] if opts[:soft_fetching_try_limit]
+        body[:soft_refetch_limit] = opts[:soft_refetch_limit] if opts[:soft_refetch_limit]
+        body[:parsing_try_limit] = opts[:parsing_try_limit] if opts[:parsing_try_limit]
         params = @options.merge({body: body.to_json})
 
         self.class.put("/jobs/#{job_id}", params)

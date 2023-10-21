@@ -18,6 +18,9 @@ module Datahen
         body[:max_size] = opts[:max_size] if opts[:max_size]
         body[:enable_global_cache] = opts[:enable_global_cache] if opts.has_key?("enable_global_cache") || opts.has_key?(:enable_global_cache)
         body[:retry_interval] = opts[:retry_interval] if opts[:retry_interval]
+        body[:soft_fetching_try_limit] = opts[:soft_fetching_try_limit] if opts[:soft_fetching_try_limit]
+        body[:soft_refetch_limit] = opts[:soft_refetch_limit] if opts[:soft_refetch_limit]
+        body[:parsing_try_limit] = opts[:parsing_try_limit] if opts[:parsing_try_limit]
 
         params = @options.merge({body: body.to_json})
 
@@ -55,6 +58,7 @@ module Datahen
         body[:parsing_status] = opts.fetch(:parsing_status){ nil }
         body[:log_error] = opts[:log_error] if opts[:log_error]
         body[:keep_outputs] = !!opts[:keep_outputs] if opts.has_key?(:keep_outputs)
+        body[:parsing_try_limit] = opts[:parsing_try_limit] if opts.fetch(:parsing_try_limit){ nil }
 
         params = @options.merge({body: body.to_json})
 
@@ -89,6 +93,11 @@ module Datahen
       def limbo(job_id, opts={})
         params = @options.merge(opts)
         self.class.put("/jobs/#{job_id}/pages/limbo", params)
+      end
+
+      def still_alive(job_id, gid, opts={})
+        params = @options.merge(opts)
+        self.class.put("/jobs/#{job_id}/pages/#{gid}/still_alive", params)
       end
     end
   end
