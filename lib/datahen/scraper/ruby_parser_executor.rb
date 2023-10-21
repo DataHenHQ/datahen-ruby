@@ -33,7 +33,6 @@ module Datahen
           :failed_content,
           :outputs,
           :pages,
-          :page,
           :save_pages,
           :save_outputs,
           :find_output,
@@ -41,7 +40,8 @@ module Datahen
           :refetch,
           :reparse,
           :limbo,
-          :finish
+          :finish,
+          :still_alive
         ].freeze
       end
 
@@ -240,6 +240,12 @@ module Datahen
         @failed_content ||= get_failed_content(job_id, gid)
       end
 
+      def still_alive page_gid
+        page_gid = gid if page_gid.nil?
+        client = Client::JobPage.new()
+        client.still_alive(job_id, page_gid)
+      end
+
       def handle_error(e)
         error = ["Parsing #{e.class}: #{e.to_s} (Job:#{job_id} GID:#{gid})",clean_backtrace(e.backtrace)].join("\n")
 
@@ -247,7 +253,8 @@ module Datahen
           job_id: job_id,
           gid: gid,
           parsing_status: :failed,
-          log_error: error)
+          log_error: error,
+          parsing_try_limit: (page || {})['parsing_try_limit'])
       end
 
     end
