@@ -24,6 +24,8 @@ require "datahen/client/scraper_var"
 require "datahen/client/job_var"
 require "datahen/client/scraper_job_var"
 require "datahen/client/job_finisher"
+require "datahen/client/job_task"
+require "datahen/client/scraper_task"
 
 module Datahen
   module Client

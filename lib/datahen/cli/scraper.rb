@@ -227,6 +227,9 @@ module Datahen
       desc "var SUBCOMMAND ...ARGS", "for managing scraper's variables"
       subcommand "var", ScraperVar
 
+      desc "task SUBCOMMAND ...ARGS", "manage task on a job"
+      subcommand "task", ScraperTask
+
 
     end
   end
