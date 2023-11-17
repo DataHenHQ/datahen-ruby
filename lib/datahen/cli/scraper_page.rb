@@ -21,10 +21,20 @@ module Datahen
       def list(scraper_name)
         if options[:job]
           client = Client::JobPage.new(options)
-          puts "#{client.all(options[:job])}"
+          json = JSON.parse(client.all(options[:job]).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         else
           client = Client::ScraperJobPage.new(options)
-          puts "#{client.all(scraper_name)}"
+          json = JSON.parse(client.all(scraper_name).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         end
       end
 

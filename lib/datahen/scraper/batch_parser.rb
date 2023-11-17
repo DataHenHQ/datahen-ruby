@@ -227,7 +227,11 @@ module Datahen
 
         # add pages
         count = 0
-        (JSON.parse(response.body) || []).each do |page|
+        json = JSON.parse(response.body)
+          if json['error'] != ""
+            return 0
+          end
+        (json['data'] || []).each do |page|
           count += 1
           next if self.loaded_pages.has_key? page['gid']
           self.pages << (self.loaded_pages[page['gid']] = page)

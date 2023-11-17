@@ -20,10 +20,20 @@ module Datahen
         collection = options.fetch(:collection) { 'default' }
         if options[:job]
           client = Client::JobOutput.new(options)
-          puts "#{client.all(options[:job], collection)}"
+          json = JSON.parse(client.all(options[:job], collection).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         else
           client = Client::ScraperJobOutput.new(options)
-          puts "#{client.all(scraper_name, collection)}"
+          json = JSON.parse(client.all(scraper_name, collection).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         end
       end
 
@@ -38,10 +48,20 @@ module Datahen
         collection = options.fetch(:collection) { 'default' }
         if options[:job]
           client = Client::JobOutput.new(options)
-          puts "#{client.find(options[:job], collection, id)}"
+          json = JSON.parse(client.find(options[:job], collection, id).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         else
           client = Client::ScraperJobOutput.new(options)
-          puts "#{client.find(scraper_name, collection, id)}"
+          json = JSON.parse(client.find(scraper_name, collection, id).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         end
       end
 
@@ -56,10 +76,20 @@ module Datahen
 
         if options[:job]
           client = Client::JobOutput.new(options)
-          puts "#{client.collections(options[:job])}"
+          json = JSON.parse(client.collections(options[:job]).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         else
           client = Client::ScraperJobOutput.new(options)
-          puts "#{client.collections(scraper_name)}"
+          json = JSON.parse(client.collections(scraper_name).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         end
       end
 

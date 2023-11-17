@@ -188,9 +188,19 @@ module Datahen
       def history(scraper_name)
         client = Client::JobStat.new(options)
         if options[:job]
-          puts "#{client.job_stats_history(options[:job], options)}"
+          json = JSON.parse(client.job_stats_history(options[:job], options).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         else
-          puts "#{client.scraper_job_stats_history(scraper_name, options)}"
+          json = JSON.parse(client.scraper_job_stats_history(scraper_name, options).body)
+          if json['error'] == ""
+            puts "#{JSON.pretty_generate(json['data'])}"
+          else 
+            puts "#{JSON.pretty_generate(json['error'])}"
+          end
         end
       end
 
