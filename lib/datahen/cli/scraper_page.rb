@@ -56,20 +56,33 @@ module Datahen
           Get the generated GID for a scraper's current job.\x5
           LONGDESC
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
-      def getgid(scraper_name, page_json)
+      def getgid(scraper_name, page_json="")
         begin
-          page = JSON.parse(page_json)
+          page_json = STDIN.read if page_json.empty?
+         
+          if page_json.strip.empty?
+            puts "Error: Invalid JSON"
+            return
+          end
+
+          parsed_page = JSON.parse(page_json)
+          if parsed_page == "{}" || parsed_page == nil || parsed_page.empty?
+            puts "Error: Invalid JSON"
+            return
+          end
           
           if options[:job]
             client = Client::JobPage.new(options)
-            puts "#{client.get_gid(options[:job], page,  options)}"
+            puts "#{client.get_gid(options[:job], parsed_page,  options)}"
           else
             client = Client::ScraperJobPage.new(options)
-            puts "#{client.get_gid(scraper_name, page, options)}"
+            puts "#{client.get_gid(scraper_name, parsed_page, options)}"
           end
 
         rescue JSON::ParserError
           puts "Error: Invalid JSON"
+        rescue Errno::ENOENT
+          puts "Error: No file"
         end
       end
 
