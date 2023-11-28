@@ -13,6 +13,10 @@ module Datahen
       LONGDESC
       option :job, :aliases => :j, type: :numeric, desc: 'Set a specific job ID'
       option :page_type, :aliases => :t, type: :string, desc: 'Filter by page_type'
+      option :url, :aliases => :u, type: :string, desc: 'Filter by url'
+      option :effective_url, :aliases => :U, type: :string, desc: 'Filter by effective_url'
+      option :body, :aliases => :b, type: :string, desc: 'Filter by body'
+      option :parent_gid, :aliases => :G, type: :string, desc: 'Filter by parent_gid'
       option :page, :aliases => :p, type: :numeric, desc: 'Get the next set of records by page.'
       option :per_page, :aliases => :P, type: :numeric, desc: 'Number of records per page. Max 500 per page.'
       option :fetch_fail, type: :boolean, desc: 'Returns only pages that fails fetching.'
