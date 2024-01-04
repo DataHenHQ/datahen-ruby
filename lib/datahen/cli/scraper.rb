@@ -40,6 +40,7 @@ module Datahen
       option :soft_fetching_try_limit, type: :numeric, desc: 'Set the soft fetching try limit value.'
       option :soft_refetch_limit, type: :numeric, desc: 'Set the soft refetch limit value.'
       option :parsing_try_limit, type: :numeric, desc: 'Set the parsing try limit value.'
+      option :prevent_kb_autoscaler, type: :boolean, desc: 'Set true to prevent the autoscaler from restarting the job. Default: false'
       def create(scraper_name, git_repository)
         # puts "options #{options}"
         client = Client::Scraper.new(options)
@@ -72,6 +73,7 @@ module Datahen
       option :soft_fetching_try_limit, type: :numeric, desc: 'Set the soft fetching try limit value.'
       option :soft_refetch_limit, type: :numeric, desc: 'Set the soft refetch limit value.'
       option :parsing_try_limit, type: :numeric, desc: 'Set the parsing try limit value.'
+      option :prevent_kb_autoscaler, type: :boolean, desc: 'Set true to prevent the autoscaler from restarting the job. Default: false'
       def update(scraper_name)
         client = Client::Scraper.new(options)
         puts "#{client.update(scraper_name, options)}"
@@ -115,6 +117,7 @@ module Datahen
       option :soft_fetching_try_limit, type: :numeric, desc: 'Set the soft fetching try limit value.'
       option :soft_refetch_limit, type: :numeric, desc: 'Set the soft refetch limit value.'
       option :parsing_try_limit, type: :numeric, desc: 'Set the parsing try limit value.'
+      option :prevent_kb_autoscaler, type: :boolean, desc: 'Set true to prevent the autoscaler from restarting the job. Default: false'
       def start(scraper_name)
         client = Client::ScraperJob.new(options)
         puts "Starting a scrape job..."

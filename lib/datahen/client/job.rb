@@ -28,6 +28,7 @@ module Datahen
         body[:soft_fetching_try_limit] = opts[:soft_fetching_try_limit] if opts[:soft_fetching_try_limit]
         body[:soft_refetch_limit] = opts[:soft_refetch_limit] if opts[:soft_refetch_limit]
         body[:parsing_try_limit] = opts[:parsing_try_limit] if opts[:parsing_try_limit]
+        body[:prevent_kb_autoscaler] = opts[:prevent_kb_autoscaler] if opts.has_key?("prevent_kb_autoscaler") || opts.has_key?(:prevent_kb_autoscaler)
         params = @options.merge({body: body.to_json})
 
         self.class.put("/jobs/#{job_id}", params)
@@ -100,7 +101,7 @@ module Datahen
       def sync_schema(job_id, opts={})
         params = @options.merge(opts)
 
-        self.class.put("/sync/jobs/#{job_id}/schema", params)
+        self.class.put("/jobs/#{job_id}/sync/schema", params)
       end
 
     end
