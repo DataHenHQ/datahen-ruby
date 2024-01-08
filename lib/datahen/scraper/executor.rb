@@ -172,11 +172,16 @@ module Datahen
         response = client.all(query_job_id, collection, {
           retry_limit: retry_limit
         })
-
         if response.code != 200
           raise "response_code: #{response.code}|#{response.parsed_response}"
         end
-        (response.body != 'null') ? response.parsed_response : []
+
+        # check stream error
+        json_data = response.body != 'null' ? response.parsed_response : {}
+        if json_data['error'] != ""
+          raise "response_code: #{response.code}|Stream error: #{json_data['error']}"
+        end
+        json_data['data'].nil? ? [] : json_data['data']
       end
 
       # Find one output by collection and query with pagination.

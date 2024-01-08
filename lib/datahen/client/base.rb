@@ -56,12 +56,18 @@ module Datahen
         target.merge(source.select{|k,v|target.has_key?(k)})
       end
 
-      def retry times, delay = nil, err_msg = nil
+      def retry times, delay = nil, err_msg = nil, stream = false
         limit = times.nil? ? nil : times.to_i
         delay = delay.nil? ? 5 : delay.to_i
         count = 0
         begin
-          yield
+          val = yield
+          if stream
+            return if val.nil?
+            if val['error'] != ""
+              raise StandardError.new(val['error'])
+            end
+          end
         rescue Error::CustomRetryError, StandardError => e
           is_custom_retry = e.is_a? Error::CustomRetryError
           real_delay = is_custom_retry ? e.delay : delay
@@ -81,6 +87,7 @@ module Datahen
           puts "#{err_msg.nil? ? '' : "#{err_msg} "}Retry \##{count}#{should_aprox ? '+' : ''}..."
           retry
         end
+        val
       end
 
       def initialize(opts={})
