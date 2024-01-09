@@ -219,8 +219,9 @@ module Datahen
         self.dequeuer_is_alive!
 
         # ensure a valid response or try again
-        if response.body.nil? || response.body.empty? || response.response.code.to_i != 200
-          self.repeat_puts(response.nil? ? 'null' : response.body)
+        has_empty_response = (response.body.nil? || response.body.empty?)
+        if has_empty_response || response.response.code.to_i != 200
+          self.repeat_puts(has_empty_response ? 'null' : response.body)
           self.recollect_garbage
           return 0
         end
