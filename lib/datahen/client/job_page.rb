@@ -63,7 +63,7 @@ module Datahen
         params = @options.merge({body: body.to_json})
 
         limit = opts.has_key?(:retry_limit) ? opts.fetch(:retry_limit) : self.default_retry_limit[:parser]
-        self.retry(limit, 5, "Error while updating the parser.") do
+        self.retry(limit, 5, "Error while updating the parser.", false, CHECK_EMPTY_BODY) do
           response = self.class.put("/jobs/#{job_id}/pages/#{gid}/parsing_update", params)
           if response.code == 422 && response.body.to_s =~ /pq:\s*deadlock/i
             raise Error::CustomRetryError.new(self.class.random_delay(5), response.body.to_s)

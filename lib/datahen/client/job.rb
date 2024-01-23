@@ -60,7 +60,7 @@ module Datahen
         params = @options.merge({body: body.to_json})
 
         limit = opts.has_key?(:retry_limit) ? opts.fetch(:retry_limit) : self.default_retry_limit[:seeder]
-        self.retry(limit, 5, "Error while updating the seeder.") do
+        self.retry(limit, 5, "Error while updating the seeder.", false, CHECK_EMPTY_BODY) do
           response = self.class.put("/jobs/#{job_id}/seeding_update", params)
           if response.code == 422 && response.body.to_s =~ /pq:\s*deadlock/i
             raise CustomRetryError.new(self.class.random_delay(5), response.body.to_s)
@@ -78,7 +78,7 @@ module Datahen
         params = @options.merge({body: body.to_json})
 
         limit = opts.has_key?(:retry_limit) ? opts.fetch(:retry_limit) : self.default_retry_limit[:finisher]
-        self.retry(limit, 5, "Error while updating the finisher.") do
+        self.retry(limit, 5, "Error while updating the finisher.", false, CHECK_EMPTY_BODY) do
           response = self.class.put("/jobs/#{job_id}/finisher_update", params)
           if response.code == 422 && response.body.to_s =~ /pq:\s*deadlock/
             raise CustomRetryError.new(self.class.random_delay(5), response.body.to_s)

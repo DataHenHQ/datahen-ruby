@@ -13,6 +13,9 @@ module Datahen
         finisher: nil
       }
 
+      CHECK_NIL = lambda{|v|v.nil?}
+      CHECK_EMPTY_BODY = lambda{|v|v.body.nil? || v.body.empty?}
+
       def self.env_auth_token
         ENV['DATAHEN_TOKEN']
       end
@@ -56,14 +59,14 @@ module Datahen
         target.merge(source.select{|k,v|target.has_key?(k)})
       end
 
-      def retry times, delay = nil, err_msg = nil, stream = false
+      def retry(times, delay = nil, err_msg = nil, stream = false, check_nil = CHECK_NIL)
         limit = times.nil? ? nil : times.to_i
         delay = delay.nil? ? 5 : delay.to_i
         count = 0
         begin
           val = yield
           if stream
-            return if val.nil?
+            return if check_nil.call(val)
             if val['error'] != ""
               raise StandardError.new(val['error'])
             end
