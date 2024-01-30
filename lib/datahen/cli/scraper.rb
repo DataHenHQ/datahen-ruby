@@ -252,6 +252,9 @@ module Datahen
       desc "task SUBCOMMAND ...ARGS", "manage task on a job"
       subcommand "task", ScraperTask
 
+      desc "resource SUBCOMMAND ...ARGS", "manage resource on a job"
+      subcommand "resource", ScraperResource
+
 
     end
   end

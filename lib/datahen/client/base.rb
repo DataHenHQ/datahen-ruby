@@ -128,6 +128,10 @@ module Datahen
         query[:force] = opts[:force] if opts[:force]
         query[:action] = opts[:action] if opts[:action]
         query[:"include-system"] = opts[:"include-system"] if opts[:"include-system"]
+        query[:"pod"] = opts[:"pod"] if opts[:"pod"]
+        query[:"container"] = opts[:"container"] if opts[:"container"]
+        query[:"executor"] = opts[:"executor"] if opts[:"executor"]
+        
 
         if opts[:query]
           if opts[:query].is_a?(Hash)
