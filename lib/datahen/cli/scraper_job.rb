@@ -112,6 +112,7 @@ module Datahen
       option :soft_refetch_limit, type: :numeric, desc: 'Set the soft refetch limit value.'
       option :parsing_try_limit, type: :numeric, desc: 'Set the parsing try limit value.'
       option :prevent_kb_autoscaler, type: :boolean, desc: 'Set true to prevent the autoscaler from restarting the job. Default: false'
+      option :deletion_protected, type: :boolean, desc: 'Set true to prevent the job to be deleted from max job count or job older than X days rules. Default: false'
       def update(scraper_name)
         if options[:job]
           client = Client::Job.new(options)

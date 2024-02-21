@@ -29,6 +29,7 @@ module Datahen
         body[:soft_refetch_limit] = opts[:soft_refetch_limit] if opts[:soft_refetch_limit]
         body[:parsing_try_limit] = opts[:parsing_try_limit] if opts[:parsing_try_limit]
         body[:prevent_kb_autoscaler] = opts[:prevent_kb_autoscaler] if opts.has_key?("prevent_kb_autoscaler") || opts.has_key?(:prevent_kb_autoscaler)
+        body[:deletion_protected] = opts[:deletion_protected] if opts.has_key?("deletion_protected") || opts.has_key?(:deletion_protected)
         params = @options.merge({body: body.to_json})
 
         self.class.put("/jobs/#{job_id}", params)
