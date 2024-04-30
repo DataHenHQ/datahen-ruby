@@ -1,5 +1,6 @@
 require 'concurrent'
 require 'parallel'
+require 'yaml'
 
 module Datahen
   module Scraper
