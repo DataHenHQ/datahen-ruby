@@ -101,10 +101,14 @@ module Datahen
       option :soft_fetching_try_limit, type: :numeric, desc: 'Set the soft fetching try limit value.'
       option :soft_refetch_limit, type: :numeric, desc: 'Set the soft refetch limit value.'
       option :parsing_try_limit, type: :numeric, desc: 'Set the parsing try limit value.'
+      option :use_browserforge, type: :boolean, desc: 'Set true to use browserforge options. Default: false'
+      option :browserforge_config, type: :string, desc: 'Set browserforge configuration. Must be in json format. i.e: {"Foo":"bar"}'
+
       def update(scraper_name, gid)
         begin
           options[:vars] = JSON.parse(options[:vars]) if options[:vars]
-
+          options[:browserforge_config] = JSON.parse(options[:browserforge_config]) if options[:browserforge_config]
+          
           if options[:job]
             client = Client::JobPage.new(options)
             puts "#{client.update(options[:job], gid, options)}"

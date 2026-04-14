@@ -20,6 +20,7 @@ module Datahen
         body[:parsing_try_limit] = opts[:parsing_try_limit] if opts[:parsing_try_limit]
         body[:prevent_kb_autoscaler] = opts[:prevent_kb_autoscaler] if opts.has_key?("prevent_kb_autoscaler") || opts.has_key?(:prevent_kb_autoscaler)
         body[:deletion_protected] = opts[:deletion_protected] if opts.has_key?("deletion_protected") || opts.has_key?(:deletion_protected)
+        body[:enable_browserforge] = opts[:enable_browserforge] if opts.has_key?("enable_browserforge") || opts.has_key?(:enable_browserforge)
         if opts[:vars]
           if opts[:vars].is_a?(Array)
             body[:vars] = opts[:vars]
@@ -55,6 +56,8 @@ module Datahen
         body[:parsing_try_limit] = opts[:parsing_try_limit] if opts[:parsing_try_limit]
         body[:prevent_kb_autoscaler] = opts[:prevent_kb_autoscaler] if opts.has_key?("prevent_kb_autoscaler") || opts.has_key?(:prevent_kb_autoscaler)
         body[:deletion_protected] = opts[:deletion_protected] if opts.has_key?("deletion_protected") || opts.has_key?(:deletion_protected)
+        body[:enable_browserforge] = opts[:enable_browserforge] if opts.has_key?("enable_browserforge") || opts.has_key?(:enable_browserforge)
+
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}/current_job", params)

@@ -18,6 +18,8 @@ module Datahen
         body[:max_size] = opts[:max_size] if opts[:max_size]
         body[:enable_global_cache] = opts[:enable_global_cache] if opts.has_key?("enable_global_cache") || opts.has_key?(:enable_global_cache)
         body[:retry_interval] = opts[:retry_interval] if opts[:retry_interval]
+        body[:use_browserforge] = opts[:use_browserforge] if opts.has_key?("use_browserforge") || opts.has_key?(:use_browserforge)
+        body[:browserforge_config] = opts[:browserforge_config] if opts.has_key?("browserforge_config") || opts.has_key?(:browserforge_config)
 
         params = @options.merge({body: body.to_json})
 

@@ -36,6 +36,7 @@ module Datahen
         body[:soft_refetch_limit] = opts[:soft_refetch_limit] if opts[:soft_refetch_limit]
         body[:parsing_try_limit] = opts[:parsing_try_limit] if opts[:parsing_try_limit]
         body[:prevent_kb_autoscaler] = opts[:prevent_kb_autoscaler] if opts.has_key?("prevent_kb_autoscaler") || opts.has_key?(:prevent_kb_autoscaler)
+        body[:enable_browserforge] = opts[:enable_browserforge] if opts.has_key?("enable_browserforge") || opts.has_key?(:enable_browserforge)
         params = @options.merge({body: body.to_json})
         self.class.post("/scrapers", params)
       end
@@ -65,6 +66,7 @@ module Datahen
         body[:soft_refetch_limit] = opts[:soft_refetch_limit] if opts[:soft_refetch_limit]
         body[:parsing_try_limit] = opts[:parsing_try_limit] if opts[:parsing_try_limit]
         body[:prevent_kb_autoscaler] = opts[:prevent_kb_autoscaler] if opts.has_key?("prevent_kb_autoscaler") || opts.has_key?(:prevent_kb_autoscaler)
+        body[:enable_browserforge] = opts[:enable_browserforge] if opts.has_key?("enable_browserforge") || opts.has_key?(:enable_browserforge)
         params = @options.merge({body: body.to_json})
 
         self.class.put("/scrapers/#{scraper_name}", params)

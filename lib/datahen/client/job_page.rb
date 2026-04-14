@@ -21,6 +21,8 @@ module Datahen
         body[:soft_fetching_try_limit] = opts[:soft_fetching_try_limit] if opts[:soft_fetching_try_limit]
         body[:soft_refetch_limit] = opts[:soft_refetch_limit] if opts[:soft_refetch_limit]
         body[:parsing_try_limit] = opts[:parsing_try_limit] if opts[:parsing_try_limit]
+        body[:use_browserforge] = opts[:use_browserforge] if opts.has_key?("use_browserforge") || opts.has_key?(:use_browserforge)
+        body[:browserforge_config] = opts[:browserforge_config] if opts.has_key?("browserforge_config") || opts.has_key?(:browserforge_config)
 
         params = @options.merge({body: body.to_json})
 
